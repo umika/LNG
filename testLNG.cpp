@@ -1,7 +1,7 @@
 /*
   testLNG.cpp
 
-  > cl testLNG.cpp LNGframe.cpp LNGclock.cpp -EHsc -I. \
+  > cl testLNG.cpp LNGframe.cpp LNGclock.cpp glut32.lib glpng.lib -EHsc -I. \
     -link -LIBPATH:. -NODEFAULTLIB:libc
 
   -EHsc destroy local objects on catch any exception
