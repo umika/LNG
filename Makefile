@@ -1,16 +1,28 @@
-CC   = cl -c -EHsc -I.
-LIB  = glut32.lib glpng.lib
-LINK = link -SUBSYSTEM:console -LIBPATH:"C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib" -LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\lib" -LIBPATH:. -NODEFAULTLIB:libc
-OBJ  = testLNG.obj LNGframe.obj LNGclock.obj
+OUTPUT = testLNG
+OBJS   = $(OUTPUT).obj LNGframe.obj LNGclock.obj
+LIBS   = glut32.lib glpng.lib
+CC     = cl
+CFLAGS = -EHsc -I.
+LINK   = link
+LPATH0 = "C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib"
+LPATH1 = "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\lib"
+LPATH2 = .
+LPALL  = -LIBPATH:$(LPATH0) -LIBPATH:$(LPATH1) -LIBPATH:$(LPATH2)
+LFLAGS = $(LPALL) -SUBSYSTEM:console -NODEFAULTLIB:libc
 
-testLNG.exe : $(OBJ)
-	$(LINK) -OUT:testLNG.exe $(OBJ) $(LIB)
+$(OUTPUT).exe : $(OBJS)
+	$(LINK) -OUT:$@ $(OBJS) $(LIBS) $(LFLAGS)
 
-testLNG.obj : testLNG.cpp testLNG.h LNGframe.h LNGclock.h
-	$(CC) testLNG.cpp
+$(OUTPUT).obj : $*.cpp $*.h LNGframe.h LNGclock.h
+	$(CC) -c $(CFLAGS) $*.cpp
 
-LNGframe.obj : LNGframe.cpp LNGframe.h LNGclock.h
-	$(CC) LNGframe.cpp
+LNGframe.obj : $*.cpp $*.h LNGclock.h
+	$(CC) -c $(CFLAGS) $*.cpp
 
-LNGclock.obj : LNGclock.cpp LNGclock.h
-	$(CC) LNGclock.cpp
+LNGclock.obj : $*.cpp $*.h
+	$(CC) -c $(CFLAGS) $*.cpp
+
+clean :
+	del *.obj
+
+all : clean $(OUTPUT).exe
