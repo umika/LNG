@@ -25,20 +25,20 @@ $(OUTPUT) : $(OBJS)
 testLNG.exe : $*.obj $(OUTPUT)
 	$(LINK) $*.obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$@
 
-testLNG.obj : $*.cpp $*.h $(HDIR)LNG3Dframe.h $(HEADS)
-	$(CC) -c $(CFLAGS) $*.cpp
+testLNG.obj : $(TDIR)$*.cpp $(TDIR)$*.h $(HDIR)LNG3Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $(TDIR)$*.cpp
 
 testLNG3D.exe : $*.obj $(OUTPUT)
 	$(LINK) $*.obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$@
 
-testLNG3D.obj : $*.cpp $*.h $(HDIR)LNG3Dframe.h $(HEADS)
-	$(CC) -c $(CFLAGS) $*.cpp
+testLNG3D.obj : $(TDIR)$*.cpp $(TDIR)$*.h $(HDIR)LNG3Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $(TDIR)$*.cpp
 
 testLNG2D.exe : $*.obj $(OUTPUT)
 	$(LINK) $*.obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$@
 
-testLNG2D.obj : $*.cpp $*.h $(HDIR)LNG2Dframe.h $(HEADS)
-	$(CC) -c $(CFLAGS) $*.cpp
+testLNG2D.obj : $(TDIR)$*.cpp $(TDIR)$*.h $(HDIR)LNG2Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $(TDIR)$*.cpp
 
 LNG3Dframe.obj : $(SDIR)$*.cpp $(HDIR)$*.h $(HEADS)
 	$(CC) -c $(CFLAGS) $(SDIR)$*.cpp
