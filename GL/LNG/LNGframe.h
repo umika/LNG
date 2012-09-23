@@ -5,8 +5,8 @@
 #ifndef __LNGframe_H__
 #define __LNGframe_H__
 
-#include "LNGut.h"
-#include "LNGclock.h"
+#include <GL/LNG/LNGut.h>
+#include <GL/LNG/LNGclock.h>
 
 class LNGframe;
 class LNGdispatcher;

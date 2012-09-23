@@ -2,7 +2,7 @@
   LNGut.cpp
 */
 
-#include "LNGut.h"
+#include <GL/LNG/LNGut.h>
 
 using namespace std;
 

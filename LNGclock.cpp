@@ -2,7 +2,7 @@
   LNGclock.cpp
 */
 
-#include "LNGclock.h"
+#include <GL/LNG/LNGclock.h>
 
 LNGclock::LNGclock() : fpsclk(0)
 {

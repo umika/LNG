@@ -5,7 +5,7 @@
 #ifndef __LNGut_H__
 #define __LNGut_H__
 
-#include "LNGtypes.h"
+#include <GL/LNG/LNGtypes.h>
 
 namespace LNGut {
 

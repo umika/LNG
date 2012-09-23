@@ -5,7 +5,7 @@
 #ifndef __LNG2Dframe_H__
 #define __LNG2Dframe_H__
 
-#include "LNGframe.h"
+#include <GL/LNG/LNGframe.h>
 
 class LNG2Dframe : public LNGframe {
 public:
