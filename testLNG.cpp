@@ -2,7 +2,7 @@
   testLNG.cpp
 
   > cl testLNG.cpp LNGframe.cpp LNGclock.cpp glut32.lib glpng.lib -EHsc -I. \
-    -link -LIBPATH:. -NODEFAULTLIB:libc
+    -link -LIBPATH:. -SUBSYSTEM:console -NODEFAULTLIB:libc
 
   -EHsc destroy local objects on catch any exception
   -NODEFAULTLIB:libc recent VC++ links 'libcmt.lib' instead of 'libc.lib'
