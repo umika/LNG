@@ -1,9 +1,11 @@
 OUTPUT = glLNG.lib
 HDIR   = GL/LNG/
 HEADS  = $(HDIR)LNGframe.h $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
-SDIR   = src/LNG/
-OBJS   = LNG3Dframe.obj LNG2Dframe.obj LNGframe.obj LNGclock.obj LNGut.obj
 TDIR   = src/
+SDIR   = src/LNG/
+ODIR   = objs/
+OBJS0  = $(ODIR)LNGframe.obj $(ODIR)LNGclock.obj $(ODIR)LNGut.obj
+OBJS   = $(ODIR)LNG3Dframe.obj $(ODIR)LNG2Dframe.obj $(OBJS0)
 LIBS   = $(OUTPUT) glpng.lib glut32.lib
 CC     = cl
 CFLAGS = -nologo -EHsc -I.
@@ -20,42 +22,42 @@ LFLAGS = -NOLOGO $(LPALL) $(SUBSYS) $(NOLIB)
 LIB    = lib
 
 $(OUTPUT) : $(OBJS)
-	$(LIB) $(OBJS) $(LFLAGS) -OUT:$@
+	$(LIB) $(OBJS) $(LFLAGS) -OUT:$(@F)
 
-testLNG.exe : $*.obj $(OUTPUT)
-	$(LINK) $*.obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$@
+testLNG.exe : $(ODIR)$(*B).obj $(OUTPUT)
+	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
 
-testLNG.obj : $(TDIR)$*.cpp $(TDIR)$*.h $(HDIR)LNG3Dframe.h $(HEADS)
-	$(CC) -c $(CFLAGS) $(TDIR)$*.cpp
+$(ODIR)testLNG.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG3Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-testLNG3D.exe : $*.obj $(OUTPUT)
-	$(LINK) $*.obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$@
+testLNG3D.exe : $(ODIR)$(*B).obj $(OUTPUT)
+	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
 
-testLNG3D.obj : $(TDIR)$*.cpp $(TDIR)$*.h $(HDIR)LNG3Dframe.h $(HEADS)
-	$(CC) -c $(CFLAGS) $(TDIR)$*.cpp
+$(ODIR)testLNG3D.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG3Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-testLNG2D.exe : $*.obj $(OUTPUT)
-	$(LINK) $*.obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$@
+testLNG2D.exe : $(ODIR)$(*B).obj $(OUTPUT)
+	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
 
-testLNG2D.obj : $(TDIR)$*.cpp $(TDIR)$*.h $(HDIR)LNG2Dframe.h $(HEADS)
-	$(CC) -c $(CFLAGS) $(TDIR)$*.cpp
+$(ODIR)testLNG2D.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG2Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-LNG3Dframe.obj : $(SDIR)$*.cpp $(HDIR)$*.h $(HEADS)
-	$(CC) -c $(CFLAGS) $(SDIR)$*.cpp
+$(ODIR)LNG3Dframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-LNG2Dframe.obj : $(SDIR)$*.cpp $(HDIR)$*.h $(HEADS)
-	$(CC) -c $(CFLAGS) $(SDIR)$*.cpp
+$(ODIR)LNG2Dframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-LNGframe.obj : $(SDIR)$*.cpp $(HDIR)$*.h $(HEADS)
-	$(CC) -c $(CFLAGS) $(SDIR)$*.cpp
+$(ODIR)LNGframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-LNGclock.obj : $(SDIR)$*.cpp $(HDIR)$*.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
-	$(CC) -c $(CFLAGS) $(SDIR)$*.cpp
+$(ODIR)LNGclock.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-LNGut.obj : $(SDIR)$*.cpp $(HDIR)$*.h $(HDIR)LNGtypes.h
-	$(CC) -c $(CFLAGS) $(SDIR)$*.cpp
+$(ODIR)LNGut.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGtypes.h
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
 clean :
-	del *.obj
+	del objs\*.obj
 
 all : clean $(OUTPUT) testLNG2D.exe testLNG3D.exe testLNG.exe
