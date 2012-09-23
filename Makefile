@@ -1,4 +1,5 @@
 OUTPUT = glLNG.lib
+LDIR   = libs/
 HDIR   = GL/LNG/
 HEADS  = $(HDIR)LNGframe.h $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
 TDIR   = src/
@@ -14,29 +15,29 @@ NOLIB  = -NODEFAULTLIB:libc
 LOPT   = -nologo -link
 LINK   = cl
 #LINK   = link
-LPATH0 = -LIBPATH:.
+LPATH0 = -LIBPATH:$(LDIR)
 LPATH1 = -LIBPATH:"C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib"
 LPATH2 = -LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\lib"
 LPALL  = $(LPATH0) $(LPATH1) $(LPATH2)
 LFLAGS = -NOLOGO $(LPALL) $(SUBSYS) $(NOLIB)
 LIB    = lib
 
-$(OUTPUT) : $(OBJS)
-	$(LIB) $(OBJS) $(LFLAGS) -OUT:$(@F)
+$(LDIR)$(OUTPUT) : $(OBJS)
+	$(LIB) $(OBJS) $(LFLAGS) -OUT:$(LDIR)$(@F)
 
-testLNG.exe : $(ODIR)$(*B).obj $(OUTPUT)
+testLNG.exe : $(ODIR)$(*B).obj $(LDIR)$(OUTPUT)
 	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
 
 $(ODIR)testLNG.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG3Dframe.h $(HEADS)
 	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-testLNG3D.exe : $(ODIR)$(*B).obj $(OUTPUT)
+testLNG3D.exe : $(ODIR)$(*B).obj $(LDIR)$(OUTPUT)
 	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
 
 $(ODIR)testLNG3D.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG3Dframe.h $(HEADS)
 	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-testLNG2D.exe : $(ODIR)$(*B).obj $(OUTPUT)
+testLNG2D.exe : $(ODIR)$(*B).obj $(LDIR)$(OUTPUT)
 	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
 
 $(ODIR)testLNG2D.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG2Dframe.h $(HEADS)
@@ -60,4 +61,4 @@ $(ODIR)LNGut.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGtypes.h
 clean :
 	del objs\*.obj
 
-all : clean $(OUTPUT) testLNG2D.exe testLNG3D.exe testLNG.exe
+all : clean $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNG.exe
