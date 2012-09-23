@@ -5,7 +5,7 @@
 #ifndef __LNGclock_H__
 #define __LNGclock_H__
 
-#include <GL/glut.h>
+#include "LNGut.h"
 
 class LNGclock {
 protected:

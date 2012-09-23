@@ -1,5 +1,5 @@
 OUTPUT = testLNG
-OBJS   = $(OUTPUT).obj LNGframe.obj LNGclock.obj
+OBJS   = $(OUTPUT).obj LNGframe.obj LNGclock.obj LNGut.obj
 LIBS   = glut32.lib glpng.lib
 CC     = cl
 CFLAGS = -EHsc -I.
@@ -17,13 +17,16 @@ LFLAGS = -link $(LPATH0) $(SUBSYS) $(NOLIB)
 $(OUTPUT).exe : $(OBJS)
 	$(LINK) $(OBJS) $(LIBS) $(LFLAGS) -OUT:$@
 
-$(OUTPUT).obj : $*.cpp $*.h LNGframe.h LNGclock.h
+$(OUTPUT).obj : $*.cpp $*.h LNGframe.h LNGclock.h LNGut.h LNGtypes.h
 	$(CC) -c $(CFLAGS) $*.cpp
 
-LNGframe.obj : $*.cpp $*.h LNGclock.h
+LNGframe.obj : $*.cpp $*.h LNGclock.h LNGut.h LNGtypes.h
 	$(CC) -c $(CFLAGS) $*.cpp
 
-LNGclock.obj : $*.cpp $*.h
+LNGclock.obj : $*.cpp $*.h LNGut.h LNGtypes.h
+	$(CC) -c $(CFLAGS) $*.cpp
+
+LNGut.obj : $*.cpp $*.h LNGtypes.h
 	$(CC) -c $(CFLAGS) $*.cpp
 
 clean :
