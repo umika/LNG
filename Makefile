@@ -44,7 +44,7 @@ LNG3Dframe.obj : $*.cpp $(HDIR)$*.h $(HEADS)
 LNG2Dframe.obj : $*.cpp $(HDIR)$*.h $(HEADS)
 	$(CC) -c $(CFLAGS) $*.cpp
 
-LNGframe.obj : $*.cpp $(HEADS)
+LNGframe.obj : $*.cpp $(HDIR)$*.h $(HEADS)
 	$(CC) -c $(CFLAGS) $*.cpp
 
 LNGclock.obj : $*.cpp $(HDIR)$*.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
