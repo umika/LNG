@@ -1,5 +1,6 @@
 OUTPUT = testLNG
-OBJS   = $(OUTPUT).obj LNGframe.obj LNGclock.obj LNGut.obj
+HEADS  = LNGframe.h LNGclock.h LNGut.h LNGtypes.h
+OBJS   = LNGframe.obj LNGclock.obj LNGut.obj
 LIBS   = glut32.lib glpng.lib
 CC     = cl
 CFLAGS = -EHsc -I.
@@ -14,10 +15,28 @@ LPATH0 = -LIBPATH:.
 LINK   = cl
 LFLAGS = -link $(LPATH0) $(SUBSYS) $(NOLIB)
 
-$(OUTPUT).exe : $(OBJS)
-	$(LINK) $(OBJS) $(LIBS) $(LFLAGS) -OUT:$@
+$(OUTPUT).exe : $*.obj LNG3Dframe.obj $(OBJS)
+	$(LINK) $*.obj LNG3Dframe.obj $(OBJS) $(LIBS) $(LFLAGS) -OUT:$@
 
-$(OUTPUT).obj : $*.cpp $*.h LNGframe.h LNGclock.h LNGut.h LNGtypes.h
+$(OUTPUT).obj : $*.cpp $*.h LNG3Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $*.cpp
+
+testLNG3D.exe : $*.obj LNG3Dframe.obj $(OBJS)
+	$(LINK) $*.obj LNG3Dframe.obj $(OBJS) $(LIBS) $(LFLAGS) -OUT:$@
+
+testLNG3D.obj : $*.cpp $*.h LNG3Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $*.cpp
+
+LNG3Dframe.obj : $*.cpp $*.h $(HEADS)
+	$(CC) -c $(CFLAGS) $*.cpp
+
+testLNG2D.exe : $*.obj LNG2Dframe.obj $(OBJS)
+	$(LINK) $*.obj LNG2Dframe.obj $(OBJS) $(LIBS) $(LFLAGS) -OUT:$@
+
+testLNG2D.obj : $*.cpp $*.h LNG2Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $*.cpp
+
+LNG2Dframe.obj : $*.cpp $*.h $(HEADS)
 	$(CC) -c $(CFLAGS) $*.cpp
 
 LNGframe.obj : $*.cpp $*.h LNGclock.h LNGut.h LNGtypes.h
@@ -32,4 +51,4 @@ LNGut.obj : $*.cpp $*.h LNGtypes.h
 clean :
 	del *.obj
 
-all : clean $(OUTPUT).exe
+all : clean $(OUTPUT).exe testLNG3D.exe testLNG2D.exe

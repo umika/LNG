@@ -47,10 +47,6 @@ void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   glutMainLoop();
 }
 
-void LNGframe::LoadTextures(void)
-{
-}
-
 void LNGframe::InitGL(void)
 {
   glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -70,10 +66,6 @@ void LNGframe::Update(void)
 {
 }
 
-void LNGframe::ChangeAngle(void)
-{
-}
-
 void LNGframe::ChangeView(void)
 {
   glMatrixMode(GL_MODELVIEW);
@@ -90,9 +82,30 @@ void LNGframe::DisplayBefore(void)
 void LNGframe::DisplayDraw(void)
 {
   glDisable(GL_TEXTURE_2D);
-  glColor4f(1.0, 0.0, 0.0, 1.0);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
+  glColor4f(0.0, 1.0, 0.0, 0.8);
+  glBegin(GL_TRIANGLES);
+    glVertex3f(-0.25, -0.25, -0.75);
+    glVertex3f( 0.25, -0.25, -0.75);
+    glVertex3f( 0.00,  0.25, -0.75);
+  glEnd();
+  glColor4f(0.0, 1.0, 1.0, 0.6);
+  glBegin(GL_TRIANGLES);
+    glVertex3f( 0.00, -0.25, -0.50);
+    glVertex3f( 0.50, -0.25, -0.50);
+    glVertex3f( 0.25,  0.25, -0.50);
+  glEnd();
+  glColor4f(1.0, 0.0, 0.0, 0.4);
+  glBegin(GL_TRIANGLES);
+    glVertex3f( 0.25, -0.25, -0.25);
+    glVertex3f( 0.75, -0.25, -0.25);
+    glVertex3f( 0.50,  0.25, -0.25);
+  glEnd();
+  glColor4f(1.0, 0.0, 0.0, 0.9);
   glRasterPos3f(0.0, 0.0, 0.0);
   glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, '*');
+  glDisable(GL_BLEND);
   glEnable(GL_TEXTURE_2D);
 }
 
@@ -109,15 +122,12 @@ void LNGframe::Display(void)
   DisplayAfter();
 }
 
-void LNGframe::Perspective(int w, int h)
-{
-}
-
 void LNGframe::Reshape(int w, int h)
 {
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
+  Ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
   Perspective(w, h);
   ChangeView();
 }

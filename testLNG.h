@@ -5,15 +5,13 @@
 #ifndef __testLNG_H__
 #define __testLNG_H__
 
-#include "LNGframe.h"
+#include "LNG3Dframe.h"
 
-class TestLNG : public LNGframe {
+class TestLNG : public LNG3Dframe {
 public:
   TestLNG();
   virtual ~TestLNG();
-  virtual void ChangeAngle(void);
   virtual void DisplayDraw(void);
-  virtual void Perspective(int w, int h);
 };
 
 #endif

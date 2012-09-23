@@ -24,18 +24,20 @@ public:
   virtual void InitFrame(int *ac, char **av, std::string &title,
     LNGsize size=default_size, LNGpoint pos=default_pos,
     GLuint mode=GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
-  virtual void LoadTextures(void);
+  virtual void LoadTextures(void) {};
   virtual void InitGL(void);
   virtual void Timer(int dt);
   virtual void Idle(void);
   virtual void Update(void);
-  virtual void ChangeAngle(void);
+  virtual void ChangeAngle(void) {};
   virtual void ChangeView(void);
   virtual void DisplayBefore(void);
   virtual void DisplayDraw(void);
   virtual void DisplayAfter(void);
   virtual void Display(void);
-  virtual void Perspective(int w, int h);
+  virtual void Ortho(
+    float x0, float x1, float y0, float y1, float z0, float z1) {};
+  virtual void Perspective(int w, int h) {};
   virtual void Reshape(int w, int h);
   virtual void KeyPress(unsigned char key, int x, int y);
 };

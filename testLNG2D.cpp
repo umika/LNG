@@ -1,7 +1,7 @@
 /*
-  testLNG.cpp
+  testLNG2D.cpp
 
-  > cl testLNG.cpp LNG3Dframe.cpp \
+  > cl testLNG2D.cpp LNG2Dframe.cpp \
     LNGframe.cpp LNGclock.cpp glut32.lib glpng.lib -EHsc -I. \
     -link -LIBPATH:. -SUBSYSTEM:console -NODEFAULTLIB:libc
 
@@ -11,38 +11,19 @@
   'GL/glpng.h' 'glpng.lib' from http://openports.se/graphics/glpng
 */
 
-#include "testLNG.h"
+#include "testLNG2D.h"
 
 using namespace std;
 
-TestLNG::TestLNG()
+void TestLNG2D::DisplayDraw(void)
 {
-}
-
-TestLNG::~TestLNG()
-{
-}
-
-void TestLNG::DisplayDraw(void)
-{
-  LNG3Dframe::DisplayDraw();
-  glDisable(GL_TEXTURE_2D);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
-  glColor4f(1.0, 1.0, 0.0, 0.3);
-  glBegin(GL_TRIANGLES);
-    glVertex3f(-1.0, -1.0, -0.2);
-    glVertex3f( 0.5, -1.0, -0.2);
-    glVertex3f( 0.6,  1.0, -0.2);
-  glEnd();
-  glDisable(GL_BLEND);
-  glEnable(GL_TEXTURE_2D);
+  LNG2Dframe::DisplayDraw();
 }
 
 int main(int ac, char **av)
 {
-  TestLNG frm;
-  string title = "testLNG";
+  TestLNG2D frm;
+  string title = "testLNG2D";
 #ifdef _DEBUG
   frm.InitFrame(&ac, av, title, LNGsize(240, 320), LNGpoint(40, 40));
 #endif
