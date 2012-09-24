@@ -20,7 +20,7 @@ protected:
 public:
   LNGclock(GLuint a_fps_desired);
   virtual ~LNGclock();
-  GLuint desired(void) {return fps_desired;};
+  GLuint desired(void) {return fps_desired;}
   virtual void FPS(void);
   virtual void FPSdisplay(void);
 };

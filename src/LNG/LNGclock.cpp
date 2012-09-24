@@ -9,8 +9,8 @@ using namespace std;
 LNGcoord3f const LNGclock::default_pos(0.0, 0.0, 0.0);
 LNGcolor4f const LNGclock::default_col(1.0, 1.0, 1.0, 1.0);
 
-LNGclock::LNGclock(GLuint a_fps_desired)
-  : flag_show(true), pos(default_pos), col(default_col),
+LNGclock::LNGclock(GLuint a_fps_desired) :
+  flag_show(true), pos(default_pos), col(default_col),
   fps_desired(a_fps_desired),
   fps(0), fps_clk(0), fps_pclk(0), fps_nclk(0), frames(0)
 {
