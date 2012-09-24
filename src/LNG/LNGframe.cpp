@@ -8,19 +8,20 @@ using namespace std;
 
 LNGsize const LNGframe::default_size(640, 480);
 LNGpoint const LNGframe::default_pos(320, 240);
+GLuint const LNGframe::fps_desired = 60;
 
 LNGframe *LNGdispatcher::frame = 0;
 
 LNGframe::LNGframe() : dispatcher(0), fps(0)
 {
-  if(!dispatcher) dispatcher = new LNGdispatcher(this);
   if(!fps) fps = new LNGclock();
+  if(!dispatcher) dispatcher = new LNGdispatcher(this);
 }
 
 LNGframe::~LNGframe()
 {
-  if(fps){ delete fps; fps = 0; }
   if(dispatcher){ delete dispatcher; dispatcher = 0; }
+  if(fps){ delete fps; fps = 0; }
 }
 
 void LNGframe::InitFrame(int *ac, char **av, std::string &title,
@@ -56,6 +57,10 @@ void LNGframe::InitGL(void)
 
 void LNGframe::Timer(int dt)
 {
+  if(dt > fps_desired) dt = 0;
+  glutTimerFunc(1000 / fps_desired, dispatcher->Timer, ++dt);
+  if(fps) fps->FPS();
+  Update();
 }
 
 void LNGframe::Idle(void)
@@ -64,6 +69,7 @@ void LNGframe::Idle(void)
 
 void LNGframe::Update(void)
 {
+  glutPostRedisplay();
 }
 
 void LNGframe::ChangeView(void)
@@ -111,6 +117,7 @@ void LNGframe::DisplayDraw(void)
 
 void LNGframe::DisplayAfter(void)
 {
+  if(fps) fps->FPSdisplay();
   // glFlush(); // glutInitDisplayMode() GLUT_SINGLE ?
   glutSwapBuffers(); // glutInitDisplayMode() GLUT_DOUBLE (double buffering)
 }

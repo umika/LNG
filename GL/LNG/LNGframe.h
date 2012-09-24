@@ -16,8 +16,9 @@ public:
   static LNGsize const default_size;
   static LNGpoint const default_pos;
 protected:
-  LNGdispatcher *dispatcher;
+  static GLuint const fps_desired;
   LNGclock *fps;
+  LNGdispatcher *dispatcher;
 public:
   LNGframe();
   virtual ~LNGframe();

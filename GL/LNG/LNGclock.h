@@ -8,12 +8,13 @@
 #include <GL/LNG/LNGut.h>
 
 class LNGclock {
-protected:
-  GLuint fpsclk;
+public:
+  GLuint fps, fps_clk, fps_pclk, fps_nclk, frames;
 public:
   LNGclock();
   virtual ~LNGclock();
-  void FPS(void);
+  virtual void FPS(void);
+  virtual void FPSdisplay(void);
 };
 
 #endif
