@@ -6,15 +6,15 @@
 
 using namespace std;
 
+GLuint const LNGframe::default_fps = 60;
 LNGsize const LNGframe::default_size(640, 480);
 LNGpoint const LNGframe::default_pos(320, 240);
-GLuint const LNGframe::fps_desired = 60;
 
 LNGframe *LNGdispatcher::frame = 0;
 
-LNGframe::LNGframe() : dispatcher(0), fps(0)
+LNGframe::LNGframe(GLuint fps_desired) : dispatcher(0), fps(0)
 {
-  if(!fps) fps = new LNGclock();
+  if(!fps) fps = new LNGclock(fps_desired);
   if(!dispatcher) dispatcher = new LNGdispatcher(this);
 }
 
@@ -57,9 +57,12 @@ void LNGframe::InitGL(void)
 
 void LNGframe::Timer(int dt)
 {
-  if(dt > fps_desired) dt = 0;
-  glutTimerFunc(1000 / fps_desired, dispatcher->Timer, ++dt);
-  if(fps) fps->FPS();
+  if(fps){
+    GLuint f = fps->desired();
+    if(dt > f) dt = 0;
+    glutTimerFunc(1000 / f, dispatcher->Timer, ++dt);
+    fps->FPS();
+  }
   Update();
 }
 

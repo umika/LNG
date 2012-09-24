@@ -13,14 +13,14 @@ class LNGdispatcher;
 
 class LNGframe {
 public:
+  static GLuint const default_fps;
   static LNGsize const default_size;
   static LNGpoint const default_pos;
 protected:
-  static GLuint const fps_desired;
   LNGclock *fps;
   LNGdispatcher *dispatcher;
 public:
-  LNGframe();
+  LNGframe(GLuint fps_desired=default_fps);
   virtual ~LNGframe();
   virtual void InitFrame(int *ac, char **av, std::string &title,
     LNGsize size=default_size, LNGpoint pos=default_pos,

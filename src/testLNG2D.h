@@ -9,8 +9,8 @@
 
 class TestLNG2D : public LNG2Dframe {
 public:
-  TestLNG2D() {};
-  virtual ~TestLNG2D() {};
+  TestLNG2D();
+  virtual ~TestLNG2D();
   virtual void DisplayDraw(void);
 };
 

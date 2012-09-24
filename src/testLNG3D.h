@@ -11,8 +11,8 @@ class TestLNG3D : public LNG3Dframe {
 protected:
   GLuint angle;
 public:
-  TestLNG3D() : angle(0) {};
-  virtual ~TestLNG3D() {};
+  TestLNG3D();
+  virtual ~TestLNG3D();
   virtual void Update(void);
   virtual void ChangeAngle(void);
   virtual void DisplayDraw(void);

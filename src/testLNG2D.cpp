@@ -15,6 +15,17 @@
 
 using namespace std;
 
+TestLNG2D::TestLNG2D()
+{
+  // fps->flag_show = false;
+  fps->pos = LNGcoord3f(-0.9, -0.5, 0.1);
+  fps->col = LNGcolor4f(0.8, 0.4, 0.2, 0.9);
+}
+
+TestLNG2D::~TestLNG2D()
+{
+}
+
 void TestLNG2D::DisplayDraw(void)
 {
   LNG2Dframe::DisplayDraw();

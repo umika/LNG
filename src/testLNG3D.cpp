@@ -15,6 +15,17 @@
 
 using namespace std;
 
+TestLNG3D::TestLNG3D() : angle(0)
+{
+  // fps->flag_show = false;
+  fps->pos = LNGcoord3f(-0.9, -0.5, 0.1);
+  fps->col = LNGcolor4f(0.4, 0.2, 0.8, 0.9);
+}
+
+TestLNG3D::~TestLNG3D()
+{
+}
+
 void TestLNG3D::Update(void)
 {
   angle = (angle + 1) % 360;

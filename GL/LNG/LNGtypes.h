@@ -26,4 +26,23 @@ public:
   LNGpoint(GLuint ax, GLuint ay) : x(ax), y(ay) {};
 } LNGpoint;
 
+typedef struct LNGcoord2f {
+  GLfloat x, y;
+public:
+  LNGcoord2f(GLfloat ax, GLfloat ay) : x(ax), y(ay) {};
+} LNGcoord2f;
+
+typedef struct LNGcoord3f {
+  GLfloat x, y, z;
+public:
+  LNGcoord3f(GLfloat ax, GLfloat ay, GLfloat az) : x(ax), y(ay), z(az) {};
+} LNGcoord3f;
+
+typedef struct LNGcolor4f {
+  GLfloat r, g, b, a;
+public:
+  LNGcolor4f(GLfloat ar, GLfloat ag, GLfloat ab, GLfloat aa)
+    : r(ar), g(ag), b(ab), a(aa) {};
+} LNGcolor4f;
+
 #endif
