@@ -139,7 +139,7 @@ void LNGframe::Reshape(int w, int h)
   glLoadIdentity();
   Ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
   Perspective(w, h);
-  Display();
+  Display(); // not use Update()
 }
 
 void LNGframe::KeyPress(unsigned char key, int x, int y)

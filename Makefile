@@ -31,6 +31,12 @@ testLNG.exe : $(ODIR)$(*B).obj $(LDIR)$(OUTPUT)
 $(ODIR)testLNG.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG3Dframe.h $(HEADS)
 	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
+testLNGsphere.exe : $(ODIR)$(*B).obj $(LDIR)$(OUTPUT)
+	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
+
+$(ODIR)testLNGsphere.obj : $(TDIR)$(*B).cpp $(TDIR)$(*B).h $(HDIR)LNG3Dframe.h $(HEADS)
+	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
+
 testLNG3D.exe : $(ODIR)$(*B).obj $(LDIR)$(OUTPUT)
 	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
 
@@ -61,4 +67,4 @@ $(ODIR)LNGut.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGtypes.h
 clean :
 	del objs\*.obj
 
-all : clean $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNG.exe
+all : clean $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNGsphere.exe testLNG.exe
