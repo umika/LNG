@@ -15,12 +15,27 @@
 
 using namespace std;
 
-TestLNG::TestLNG()
+TestLNG::TestLNG() : angle(0)
 {
 }
 
 TestLNG::~TestLNG()
 {
+}
+
+void TestLNG::Update(void)
+{
+  angle = (angle + 1) % 360;
+  LNG3Dframe::Update();
+}
+
+void TestLNG::ChangeAngle(void)
+{
+  // when use rotation, must change mode in Perspective()
+  glTranslatef(0.0, 0.0, -5.0);
+  glRotatef(-30, 1, 0, 0);
+  glRotatef(angle, 0, 1, 0);
+  glRotatef(-30, 0, 0, 1);
 }
 
 void TestLNG::DisplayDraw(void)

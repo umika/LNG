@@ -76,8 +76,6 @@ void LNGframe::ChangeView(void)
 {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  ChangeAngle();
-  Display();
 }
 
 void LNGframe::DisplayBefore(void)
@@ -125,6 +123,8 @@ void LNGframe::DisplayAfter(void)
 void LNGframe::Display(void)
 {
   DisplayBefore();
+  ChangeView();
+  ChangeAngle();
   DisplayDraw();
   DisplayAfter();
 }
@@ -136,7 +136,7 @@ void LNGframe::Reshape(int w, int h)
   glLoadIdentity();
   Ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
   Perspective(w, h);
-  ChangeView();
+  Display();
 }
 
 void LNGframe::KeyPress(unsigned char key, int x, int y)
