@@ -118,7 +118,6 @@ void LNGframe::DisplayDraw(void)
 
 void LNGframe::DisplayAfter(void)
 {
-  if(fps) fps->FPSdisplay();
   // glFlush(); // glutInitDisplayMode() GLUT_SINGLE ?
   glutSwapBuffers(); // glutInitDisplayMode() GLUT_DOUBLE (double buffering)
 }
@@ -128,6 +127,7 @@ void LNGframe::Display(void)
   DisplayBefore();
   ChangeView();
   ChangeAngle();
+  if(fps) fps->FPSdisplay();
   DisplayDraw();
   DisplayAfter();
 }

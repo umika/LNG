@@ -27,20 +27,6 @@ TestLNGsphere::~TestLNGsphere()
 {
 }
 
-void TestLNGsphere::Update(void)
-{
-  angle.x = angle.x + 1.5;
-  angle.y = angle.y + 2.1;
-  angle.z = angle.z + 0.1;
-  if(angle.x >= 360.0) angle.x -= 360.0;
-  if(angle.y >= 360.0) angle.y -= 360.0;
-  if(angle.z >= 360.0) angle.z -= 360.0;
-  if(angle.x < 0.0) angle.x += 360.0;
-  if(angle.y < 0.0) angle.y += 360.0;
-  if(angle.z < 0.0) angle.z += 360.0;
-  LNG3Dframe::Update();
-}
-
 void TestLNGsphere::InitGL(void)
 {
   LNG3Dframe::InitGL();
@@ -53,6 +39,20 @@ void TestLNGsphere::InitGL(void)
   glEnable(GL_LIGHT0);
   glShadeModel(GL_SMOOTH);
   glClearDepth(1.0);
+}
+
+void TestLNGsphere::Update(void)
+{
+  angle.x = angle.x + 1.5;
+  angle.y = angle.y + 2.1;
+  angle.z = angle.z + 0.1;
+  if(angle.x >= 360.0) angle.x -= 360.0;
+  if(angle.y >= 360.0) angle.y -= 360.0;
+  if(angle.z >= 360.0) angle.z -= 360.0;
+  if(angle.x < 0.0) angle.x += 360.0;
+  if(angle.y < 0.0) angle.y += 360.0;
+  if(angle.z < 0.0) angle.z += 360.0;
+  LNG3Dframe::Update();
 }
 
 void TestLNGsphere::ChangeAngle(void)
