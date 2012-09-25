@@ -156,7 +156,8 @@ void LNGframe::KeyPress(unsigned char key, int x, int y)
 
 void LNGframe::SpecialKeyPress(int key, int x, int y)
 {
-  if(key == GLUT_KEY_END) fps->flag_show = fps->flag_show ? false : true;
+  if(key == GLUT_KEY_END)
+    if(fps) fps->flag_show = fps->flag_show ? false : true;
 }
 
 void LNGframe::MouseAction(int button, int state, int x, int y)
