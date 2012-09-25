@@ -41,6 +41,14 @@ public:
   virtual void Perspective(int w, int h) {}
   virtual void Reshape(int w, int h);
   virtual void KeyPress(unsigned char key, int x, int y);
+  virtual void MouseMove(int button, int state, int x, int y) {}
+  virtual void LeftDown(int button, int state, int x, int y) {}
+  virtual void LeftUp(int button, int state, int x, int y) {}
+  virtual void MiddleDown(int button, int state, int x, int y) {}
+  virtual void MiddleUp(int button, int state, int x, int y) {}
+  virtual void RightDown(int button, int state, int x, int y) {}
+  virtual void RightUp(int button, int state, int x, int y) {}
+  virtual void MouseAction(int button, int state, int x, int y);
 };
 
 class LNGdispatcher {
@@ -55,6 +63,8 @@ public:
   static void Reshape(int w, int h) {frame->Reshape(w, h);}
   static void KeyPress(unsigned char key, int x, int y)
     {frame->KeyPress(key, x, y);}
+  static void MouseAction(int button, int state, int x, int y)
+    {frame->MouseAction(button, state, x, y);}
 };
 
 #endif

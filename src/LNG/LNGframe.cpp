@@ -149,3 +149,23 @@ void LNGframe::KeyPress(unsigned char key, int x, int y)
     exit(0);
   }
 }
+
+void LNGframe::MouseAction(int button, int state, int x, int y)
+{
+  MouseMove(button, state, x, y);
+  if(button == GLUT_LEFT_BUTTON){
+    if(state == GLUT_DOWN) LeftDown(button, state, x, y);
+    else if(state == GLUT_UP) LeftUp(button, state, x, y);
+    else ; // through
+  }
+  if(button == GLUT_MIDDLE_BUTTON){ // not use else if
+    if(state == GLUT_DOWN) MiddleDown(button, state, x, y);
+    else if(state == GLUT_UP) MiddleUp(button, state, x, y);
+    else ; // through
+  }
+  if(button == GLUT_RIGHT_BUTTON){ // not use else if
+    if(state == GLUT_DOWN) RightDown(button, state, x, y);
+    else if(state == GLUT_UP) RightUp(button, state, x, y);
+    else ; // through
+  }
+}
