@@ -44,6 +44,10 @@ void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   glutDisplayFunc(dispatcher->Display);
   glutReshapeFunc(dispatcher->Reshape);
   glutKeyboardFunc(dispatcher->KeyPress);
+  glutSpecialFunc(dispatcher->SpecialKeyPress);
+  glutMouseFunc(dispatcher->MouseAction);
+  glutMotionFunc(dispatcher->Motion);
+  glutPassiveMotionFunc(dispatcher->PassiveMotion);
   InitGL();
   glutMainLoop();
 }
@@ -150,9 +154,13 @@ void LNGframe::KeyPress(unsigned char key, int x, int y)
   }
 }
 
+void LNGframe::SpecialKeyPress(int key, int x, int y)
+{
+  if(key == GLUT_KEY_END) fps->flag_show = fps->flag_show ? false : true;
+}
+
 void LNGframe::MouseAction(int button, int state, int x, int y)
 {
-  MouseMove(button, state, x, y);
   if(button == GLUT_LEFT_BUTTON){
     if(state == GLUT_DOWN) LeftDown(button, state, x, y);
     else if(state == GLUT_UP) LeftUp(button, state, x, y);
@@ -168,4 +176,12 @@ void LNGframe::MouseAction(int button, int state, int x, int y)
     else if(state == GLUT_UP) RightUp(button, state, x, y);
     else ; // through
   }
+}
+
+void LNGframe::Motion(int x, int y)
+{
+}
+
+void LNGframe::PassiveMotion(int x, int y)
+{
 }
