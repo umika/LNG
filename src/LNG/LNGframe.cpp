@@ -12,7 +12,8 @@ LNGpoint const LNGframe::default_pos(320, 240);
 
 LNGframe *LNGdispatcher::frame = 0;
 
-LNGframe::LNGframe(GLuint fps_desired) : fps(0), dispatcher(0), loader(0)
+LNGframe::LNGframe(GLuint fps_desired) : done(false),
+  fps(0), dispatcher(0), loader(0)
 {
   if(!fps) fps = new LNGclock(fps_desired);
   if(!fps) throw LNGexception("cannot create LNGclock");
@@ -20,9 +21,15 @@ LNGframe::LNGframe(GLuint fps_desired) : fps(0), dispatcher(0), loader(0)
   if(!dispatcher) throw LNGexception("cannot create LNGdispatcher");
   if(!loader) loader = new LNGloader();
   if(!loader) throw LNGexception("cannot create LNGloader");
+  atexit(dispatcher->Finalize);
 }
 
 LNGframe::~LNGframe()
+{
+  Finalize();
+}
+
+void LNGframe::Finalize(void)
 {
   if(loader){ delete loader; loader = 0; }
   if(dispatcher){ delete dispatcher; dispatcher = 0; }
@@ -54,6 +61,9 @@ void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   glutMotionFunc(dispatcher->Motion);
   glutPassiveMotionFunc(dispatcher->PassiveMotion);
   InitGL();
+  // The function atexit() must be set before calling glutMainLoop(), Otherwise
+  // exit() will called directly when clicked 'close button' of the window
+  // without to free any resource.
   glutMainLoop();
 }
 
@@ -80,6 +90,10 @@ void LNGframe::Timer(int dt)
 
 void LNGframe::Idle(void)
 {
+  if(done){
+    glutDestroyWindow(glutGetWindow());
+    exit(0); // This will call Finalize() by atexit().
+  }
   if(loader->flag_loading) loader->LoadNext();
 }
 
@@ -157,10 +171,7 @@ void LNGframe::Reshape(int w, int h)
 
 void LNGframe::KeyPress(unsigned char key, int x, int y)
 {
-  if(key == 27){ // ESC
-    glutDestroyWindow(glutGetWindow());
-    exit(0);
-  }
+  if(key == 27) done = true; // ESC
 }
 
 void LNGframe::SpecialKeyPress(int key, int x, int y)

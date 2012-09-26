@@ -18,12 +18,14 @@ public:
   static LNGsize const default_size;
   static LNGpoint const default_pos;
 protected:
+  bool done;
   LNGclock *fps;
   LNGdispatcher *dispatcher;
   LNGloader *loader;
 public:
   LNGframe(GLuint fps_desired=default_fps);
   virtual ~LNGframe();
+  virtual void Finalize(void);
   virtual void InitFrame(int *ac, char **av, std::string &title,
     LNGsize size=default_size, LNGpoint pos=default_pos,
     GLuint mode=GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
@@ -61,6 +63,7 @@ protected:
 public:
   LNGdispatcher(LNGframe *aframe) {frame = aframe;}
   virtual ~LNGdispatcher() {}
+  static void Finalize(void) {frame->Finalize();}
   static void Timer(int dt) {frame->Timer(dt);}
   static void Idle(void) {frame->Idle();}
   static void Display(void) {frame->Display();}
