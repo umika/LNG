@@ -5,6 +5,7 @@
 #ifndef __LNGtypes_H__
 #define __LNGtypes_H__
 
+#include <deque>
 #include <iostream>
 #include <sstream>
 #include <string>

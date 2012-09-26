@@ -1,12 +1,15 @@
 OUTPUT = glLNG.lib
 LDIR   = libs/
 HDIR   = GL/LNG/
-HEADS  = $(HDIR)LNGframe.h $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
+HEADS0 = $(HDIR)LNGtexture.h $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
+HEADS1 = $(HDIR)LNGframe.h
+HEADS  = $(HEADS1) $(HEADS0)
 TDIR   = src/
 SDIR   = src/LNG/
 ODIR   = objs/
-OBJS0  = $(ODIR)LNGframe.obj $(ODIR)LNGclock.obj $(ODIR)LNGut.obj
-OBJS   = $(ODIR)LNG3Dframe.obj $(ODIR)LNG2Dframe.obj $(OBJS0)
+OBJS0  = $(ODIR)LNGtexture.obj $(ODIR)LNGclock.obj $(ODIR)LNGut.obj
+OBJS1  = $(ODIR)LNGframe.obj
+OBJS   = $(ODIR)LNG3Dframe.obj $(ODIR)LNG2Dframe.obj $(OBJS1) $(OBJS0)
 LIBS   = $(OUTPUT) glpng.lib glut32.lib
 CC     = cl
 CFLAGS = -nologo -EHsc -I.
@@ -18,7 +21,7 @@ LINK   = cl
 LPATH0 = -LIBPATH:$(LDIR)
 LPATH1 = -LIBPATH:"C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib"
 LPATH2 = -LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\lib"
-LPALL  = $(LPATH0) $(LPATH1) $(LPATH2)
+LPALL  = $(LPATH2) $(LPATH1) $(LPATH0)
 LFLAGS = -NOLOGO $(LPALL) $(SUBSYS) $(NOLIB)
 LIB    = lib
 
@@ -56,6 +59,9 @@ $(ODIR)LNG2Dframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
 	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
 $(ODIR)LNGframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
+
+$(ODIR)LNGtexture.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
 	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
 $(ODIR)LNGclock.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGut.h $(HDIR)LNGtypes.h

@@ -7,6 +7,7 @@
 
 #include <GL/LNG/LNGut.h>
 #include <GL/LNG/LNGclock.h>
+#include <GL/LNG/LNGtexture.h>
 
 class LNGframe;
 class LNGdispatcher;
@@ -19,13 +20,14 @@ public:
 protected:
   LNGclock *fps;
   LNGdispatcher *dispatcher;
+  LNGloader *loader;
 public:
   LNGframe(GLuint fps_desired=default_fps);
   virtual ~LNGframe();
   virtual void InitFrame(int *ac, char **av, std::string &title,
     LNGsize size=default_size, LNGpoint pos=default_pos,
     GLuint mode=GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
-  virtual void LoadTextures(void) {}
+  virtual void LoadTextures(void);
   virtual void InitGL(void);
   virtual void Timer(int dt);
   virtual void Idle(void);

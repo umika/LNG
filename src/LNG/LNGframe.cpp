@@ -12,16 +12,19 @@ LNGpoint const LNGframe::default_pos(320, 240);
 
 LNGframe *LNGdispatcher::frame = 0;
 
-LNGframe::LNGframe(GLuint fps_desired) : dispatcher(0), fps(0)
+LNGframe::LNGframe(GLuint fps_desired) : fps(0), dispatcher(0), loader(0)
 {
   if(!fps) fps = new LNGclock(fps_desired);
   if(!fps) throw LNGexception("cannot create LNGclock");
   if(!dispatcher) dispatcher = new LNGdispatcher(this);
   if(!dispatcher) throw LNGexception("cannot create LNGdispatcher");
+  if(!loader) loader = new LNGloader();
+  if(!loader) throw LNGexception("cannot create LNGloader");
 }
 
 LNGframe::~LNGframe()
 {
+  if(loader){ delete loader; loader = 0; }
   if(dispatcher){ delete dispatcher; dispatcher = 0; }
   if(fps){ delete fps; fps = 0; }
 }
@@ -54,6 +57,11 @@ void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   glutMainLoop();
 }
 
+void LNGframe::LoadTextures(void)
+{
+  loader->InitLoad();
+}
+
 void LNGframe::InitGL(void)
 {
   glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -72,6 +80,7 @@ void LNGframe::Timer(int dt)
 
 void LNGframe::Idle(void)
 {
+  if(loader->flag_loading) loader->LoadNext();
 }
 
 void LNGframe::Update(void)
