@@ -20,7 +20,8 @@ public:
 public:
   LNGtexture(GLuint adepth=default_depth, LNGsize asize=default_size);
   virtual ~LNGtexture();
-  virtual GLuint LoadTexture(std::string &filename,
+  virtual void Finalize(void);
+  virtual GLuint Load(std::string &filename,
     std::string const &resource_dir=default_resource_dir);
   virtual GLubyte *CustomData(LNGsize size, GLubyte *buf);
 };
