@@ -14,6 +14,18 @@
 #include <GL/glut.h>
 #include <GL/glpng.h>
 
+#define default_LNGexception_str "default LNGexception"
+
+class LNGexception {
+protected:
+  std::string str;
+public:
+  LNGexception(char *astr=default_LNGexception_str) : str(astr) {}
+  LNGexception(std::string &astr) : str(astr) {}
+  virtual ~LNGexception() {}
+  virtual std::string &getstr(void) {return str;}
+};
+
 typedef struct LNGsize {
   GLuint w, h;
 public:

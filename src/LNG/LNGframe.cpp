@@ -15,7 +15,9 @@ LNGframe *LNGdispatcher::frame = 0;
 LNGframe::LNGframe(GLuint fps_desired) : dispatcher(0), fps(0)
 {
   if(!fps) fps = new LNGclock(fps_desired);
+  if(!fps) throw LNGexception("cannot create LNGclock");
   if(!dispatcher) dispatcher = new LNGdispatcher(this);
+  if(!dispatcher) throw LNGexception("cannot create LNGdispatcher");
 }
 
 LNGframe::~LNGframe()
@@ -61,12 +63,10 @@ void LNGframe::InitGL(void)
 
 void LNGframe::Timer(int dt)
 {
-  if(fps){
-    GLuint f = fps->desired();
-    if(dt > f) dt = 0;
-    glutTimerFunc(1000 / f, dispatcher->Timer, ++dt);
-    fps->FPS();
-  }
+  GLuint f = fps->desired();
+  if(dt > f) dt = 0;
+  glutTimerFunc(1000 / f, dispatcher->Timer, ++dt);
+  fps->FPS();
   Update();
 }
 
@@ -131,7 +131,7 @@ void LNGframe::Display(void)
   DisplayBefore();
   ChangeView();
   ChangeAngle();
-  if(fps) fps->FPSdisplay();
+  fps->FPSdisplay();
   DisplayDraw();
   DisplayAfter();
 }
@@ -156,8 +156,7 @@ void LNGframe::KeyPress(unsigned char key, int x, int y)
 
 void LNGframe::SpecialKeyPress(int key, int x, int y)
 {
-  if(key == GLUT_KEY_END)
-    if(fps) fps->flag_show = fps->flag_show ? false : true;
+  if(key == GLUT_KEY_END) fps->flag_show = !fps->flag_show;
 }
 
 void LNGframe::MouseAction(int button, int state, int x, int y)

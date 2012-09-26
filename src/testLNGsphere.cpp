@@ -109,11 +109,15 @@ void TestLNGsphere::DisplayDraw(void)
 
 int main(int ac, char **av)
 {
-  TestLNGsphere frm;
-  string title = "testLNGsphere";
+  try{
+    TestLNGsphere frm;
+    string title = "testLNGsphere";
 #ifdef _DEBUG
-  frm.InitFrame(&ac, av, title, LNGsize(240, 320), LNGpoint(40, 40));
+    frm.InitFrame(&ac, av, title, LNGsize(240, 320), LNGpoint(40, 40));
 #endif
-  frm.InitFrame(&ac, av, title);
+    frm.InitFrame(&ac, av, title);
+  }catch(LNGexception &e){
+    cout << e.getstr();
+  }
   return 0;
 }
