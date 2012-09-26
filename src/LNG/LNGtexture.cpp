@@ -24,6 +24,11 @@ LNGtexture::~LNGtexture()
 
 void LNGtexture::Finalize(void)
 {
+  if(!flag_loading && buffer){
+#ifdef _DEBUG
+    cout << "finalize texture id: " << id << endl;
+#endif
+  }
   if(buffer){ delete[] buffer; buffer = 0; }
 }
 
@@ -32,9 +37,14 @@ GLuint LNGtexture::Load(std::string &filename,
 {
   string &filepath = LNGut::path_join(2, &resource_dir, &filename);
 #ifdef _DEBUG
-  cout << filepath << endl;
+  cout << "loading texture: " << filepath;
+  cout.flush();
 #endif
   id = 1;
+#ifdef _DEBUG
+  cout << " id: " << id << endl;
+#endif
+  if(!id) throw LNGexception(string("cannot load texture: ") + filepath);
   flag_loading = false;
   return id;
 }
@@ -57,9 +67,6 @@ LNGloader::~LNGloader()
       // may use (*textures)[0]; or textures->at(0);
       LNGtexture *texture = textures->front();
       textures->pop_front();
-#ifdef _DEBUG
-      cout << "delete texture: " << texture->id << endl;
-#endif
       texture->Finalize();
       delete texture;
     }
@@ -79,15 +86,8 @@ void LNGloader::LoadNext(void)
   for(it = textures->begin(); it != textures->end(); ++it){
     if(!(*it)->flag_loading) continue;
     GLuint id = (*it)->Load(string("72dpi.png"));
-#ifdef _DEBUG
-    cout << "loading texture: " << id << endl;
-#endif
-    if(!id){
-      throw LNGexception("cannot load texture");
-    }else{
-      exist = true;
-      break; // load only 1 texture
-    }
+    exist = true;
+    break; // load only 1 texture
   }
   if(!exist) flag_loading = false;
 }

@@ -42,6 +42,7 @@ int main(int ac, char **av)
     frm.InitFrame(&ac, av, title);
   }catch(LNGexception &e){
     cout << e.getstr();
+    exit(1);
   }
   return 0;
 }

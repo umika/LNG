@@ -21,7 +21,6 @@ LNGframe::LNGframe(GLuint fps_desired) : done(false),
   if(!dispatcher) throw LNGexception("cannot create LNGdispatcher");
   if(!loader) loader = new LNGloader();
   if(!loader) throw LNGexception("cannot create LNGloader");
-  atexit(dispatcher->Finalize);
 }
 
 LNGframe::~LNGframe()
@@ -64,6 +63,7 @@ void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   // The function atexit() must be set before calling glutMainLoop(), Otherwise
   // exit() will called directly when clicked 'close button' of the window
   // without to free any resource.
+  atexit(dispatcher->Finalize);
   glutMainLoop();
 }
 
