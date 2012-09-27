@@ -13,19 +13,28 @@ LNGsize const LNGtexture::default_size(256, 256);
 LNGtexture::LNGtexture(GLuint adepth, LNGsize asize) : flag_loading(true),
   buffer(0), depth(adepth), size(asize), id(0)
 {
+#if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
+  cout << "LNGtexture::LNGtexture" << endl;
+#endif
   if(!buffer) buffer = new GLubyte[depth * asize.w * asize.h];
   if(!buffer) throw LNGexception("cannot allocate buffer for LNGtexture");
 }
 
 LNGtexture::~LNGtexture()
 {
+#if defined( __TRACE_DESTRUCTION__ ) || defined( _DEBUG )
+  cout << "LNGtexture::~LNGtexture" << endl;
+#endif
   Finalize();
 }
 
 void LNGtexture::Finalize(void)
 {
+#if defined( __TRACE_FINALIZATION__ ) || defined( _DEBUG )
+  cout << "LNGtexture::Finalize" << endl;
+#endif
   if(!flag_loading && buffer){
-#ifdef _DEBUG
+#if defined( __TRACE_FINALIZATION__ ) || defined( _DEBUG )
     cout << "finalize texture id: " << id << endl;
 #endif
   }
@@ -35,13 +44,16 @@ void LNGtexture::Finalize(void)
 GLuint LNGtexture::Load(std::string &filename,
   std::string const &resource_dir)
 {
+#if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
+  cout << "LNGtexture::Load" << endl;
+#endif
   string &filepath = LNGut::path_join(2, &resource_dir, &filename);
-#ifdef _DEBUG
+#if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
   cout << "loading texture: " << filepath;
   cout.flush();
 #endif
   id = 1;
-#ifdef _DEBUG
+#if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
   cout << " id: " << id << endl;
 #endif
   if(!id) throw LNGexception(string("cannot load texture: ") + filepath);

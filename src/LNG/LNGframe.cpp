@@ -15,6 +15,9 @@ LNGframe *LNGdispatcher::frame = 0;
 LNGframe::LNGframe(GLuint fps_desired) : done(false),
   fps(0), dispatcher(0), loader(0)
 {
+#if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
+  cout << "LNGframe::LNGframe" << endl;
+#endif
   if(!fps) fps = new LNGclock(fps_desired);
   if(!fps) throw LNGexception("cannot create LNGclock");
   if(!dispatcher) dispatcher = new LNGdispatcher(this);
@@ -25,11 +28,17 @@ LNGframe::LNGframe(GLuint fps_desired) : done(false),
 
 LNGframe::~LNGframe()
 {
+#if defined( __TRACE_DESTRUCTION__ ) || defined( _DEBUG )
+  cout << "LNGframe::~LNGframe" << endl;
+#endif
   Finalize();
 }
 
 void LNGframe::Finalize(void)
 {
+#if defined( __TRACE_FINALIZATION__ ) || defined( _DEBUG )
+  cout << "LNGframe::Finalize" << endl;
+#endif
   if(loader){ delete loader; loader = 0; }
   if(dispatcher){ delete dispatcher; dispatcher = 0; }
   if(fps){ delete fps; fps = 0; }
@@ -38,6 +47,9 @@ void LNGframe::Finalize(void)
 void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   LNGsize size, LNGpoint pos, GLuint mode)
 {
+#if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
+  cout << "LNGframe::InitFrame" << endl;
+#endif
 #ifdef _DEBUG
   cout << "ac: " << *ac;
   for(int i = 0; i < *ac; i++) cout << ", " << av[i];
