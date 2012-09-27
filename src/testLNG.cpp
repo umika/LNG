@@ -134,9 +134,15 @@ int main(int ac, char **av)
     frm.InitFrame(&ac, av, title, LNGsize(240, 320), LNGpoint(40, 40));
 #endif
     frm.InitFrame(&ac, av, title);
+    frm.MainLoop();
   }catch(LNGexception &e){
-    cout << e.getstr();
-    exit(1);
+    cout << e.getstr() << endl;
+#if defined( __TRACE_DESTRUCTION__ ) || defined( _DEBUG )
+    cout << "after LNGexception in main" << endl;
+#endif
   }
+#if defined( __TRACE_DESTRUCTION__ ) || defined( _DEBUG )
+  cout << "now return from main" << endl;
+#endif
   return 0;
 }

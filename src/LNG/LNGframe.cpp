@@ -22,6 +22,7 @@ LNGframe::LNGframe(GLuint fps_desired) : done(false),
   if(!fps) throw LNGexception("cannot create LNGclock");
   if(!dispatcher) dispatcher = new LNGdispatcher(this);
   if(!dispatcher) throw LNGexception("cannot create LNGdispatcher");
+  atexit(dispatcher->Finalize);
   if(!loader) loader = new LNGloader();
   if(!loader) throw LNGexception("cannot create LNGloader");
 }
@@ -72,10 +73,15 @@ void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   glutMotionFunc(dispatcher->Motion);
   glutPassiveMotionFunc(dispatcher->PassiveMotion);
   InitGL();
+}
+
+void LNGframe::MainLoop(void)
+{
   // The function atexit() must be set before calling glutMainLoop(), Otherwise
   // exit() will called directly when clicked 'close button' of the window
-  // without to free any resource.
-  atexit(dispatcher->Finalize);
+  // without to free any resource. (Call atexit() in the constructor.)
+  // LNGdispatcher::frame must be reset to NULL before returning from main(),
+  // because atexit() setting should not be canceled.
   glutMainLoop();
 }
 

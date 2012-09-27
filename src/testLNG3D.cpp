@@ -55,9 +55,9 @@ int main(int ac, char **av)
     frm.InitFrame(&ac, av, title, LNGsize(240, 320), LNGpoint(40, 40));
 #endif
     frm.InitFrame(&ac, av, title);
+    frm.MainLoop();
   }catch(LNGexception &e){
-    cout << e.getstr();
-    exit(1);
+    cout << e.getstr() << endl;
   }
   return 0;
 }
