@@ -19,14 +19,14 @@ LOPT   = -nologo -link
 LINK   = cl
 #LINK   = link
 LPATH0 = -LIBPATH:$(LDIR)
-LPATH1 = -LIBPATH:"C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib"
-LPATH2 = -LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\lib"
+#LPATH1 = -LIBPATH:"C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib"
+#LPATH2 = -LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\lib"
 LPALL  = $(LPATH2) $(LPATH1) $(LPATH0)
 LFLAGS = -NOLOGO $(LPALL) $(SUBSYS) $(NOLIB)
-LIB    = lib
+LIBEXE = lib
 
 $(LDIR)$(OUTPUT) : $(OBJS)
-	$(LIB) $(OBJS) $(LFLAGS) -OUT:$(LDIR)$(@F)
+	$(LIBEXE) $(OBJS) $(LFLAGS) -OUT:$(LDIR)$(@F)
 
 testLNG.exe : $(ODIR)$(*B).obj $(LDIR)$(OUTPUT)
 	$(LINK) $(ODIR)$(*B).obj $(LIBS) $(LOPT) $(LFLAGS) -OUT:$(@F)
