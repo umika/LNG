@@ -18,6 +18,9 @@ using namespace std;
 TestLNG::TestLNG() : distance(5.0), box(1.5), radius(0.5),
   org(LNGcoord3f(0.0, 0.0, 0.0)), vel(LNGcoord3f(0.01, 0.02, 0.03)),
   angle(LNGcoord3f(0.0, 0.0, 0.0)), prev(LNGpoint(0, 0))
+#ifdef __TEST_GLUI__
+  , glui(0), view_rot(0)
+#endif
 {
   // fps->flag_show = false;
   fps->pos = LNGcoord3f(-0.5, 0.8, -0.8);
@@ -26,6 +29,15 @@ TestLNG::TestLNG() : distance(5.0), box(1.5), radius(0.5),
 
 TestLNG::~TestLNG()
 {
+}
+
+void TestLNG::Finalize(void)
+{
+#ifdef __TEST_GLUI__
+  if(view_rot) { delete view_rot; view_rot = 0; };
+  if(glui) { delete glui; glui = 0; };
+#endif
+  LNG3Dframe::Finalize();
 }
 
 void TestLNG::InitGL(void)
@@ -40,6 +52,13 @@ void TestLNG::InitGL(void)
   glEnable(GL_LIGHT0);
   glShadeModel(GL_SMOOTH);
   glClearDepth(1.0);
+
+#ifdef __TEST_GLUI__
+  static float rotate[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+  glui = GLUI_Master.create_glui("control");
+  view_rot = glui->add_rotation("Rotation", rotate);
+  glui->add_button("Exit", 0, dispatcher->Quit);
+#endif
 }
 
 void TestLNG::Update(void)

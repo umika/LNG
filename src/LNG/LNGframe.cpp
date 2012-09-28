@@ -85,6 +85,12 @@ void LNGframe::MainLoop(void)
   glutMainLoop();
 }
 
+void LNGframe::Quit(int n)
+{
+  glutDestroyWindow(glutGetWindow());
+  exit(n); // This will call Finalize() by atexit().
+}
+
 void LNGframe::LoadTextures(void)
 {
   loader->InitLoad();
@@ -108,10 +114,7 @@ void LNGframe::Timer(int dt)
 
 void LNGframe::Idle(void)
 {
-  if(done){
-    glutDestroyWindow(glutGetWindow());
-    exit(0); // This will call Finalize() by atexit().
-  }
+  if(done) Quit(0);
   if(loader->flag_loading) loader->LoadNext();
 }
 

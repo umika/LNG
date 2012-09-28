@@ -13,12 +13,6 @@
 #include <cstdlib>
 
 #include <GL/glut.h>
-#if defined( __USE_GLUI__ ) || defined( __USE_GLUI_DLL__ )
-  #ifdef __USE_GLUI_DLL__
-    #define GLUIDLL
-  #endif
-  #include <GL/glui.h>
-#endif
 #include <GL/glpng.h>
 
 #define default_LNGexception_str "default LNGexception"

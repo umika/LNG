@@ -30,6 +30,7 @@ public:
     LNGsize size=default_size, LNGpoint pos=default_pos,
     GLuint mode=GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
   virtual void MainLoop(void);
+  virtual void Quit(int n);
   virtual void LoadTextures(void);
   virtual void InitGL(void);
   virtual void Timer(int dt);
@@ -65,6 +66,7 @@ public:
   LNGdispatcher(LNGframe *aframe) {frame = aframe;}
   virtual ~LNGdispatcher() {frame = 0;}
   static void Finalize(void) {if(frame) frame->Finalize();}
+  static void Quit(int n) {if(frame) frame->Quit(n);}
   static void Timer(int dt) {frame->Timer(dt);}
   static void Idle(void) {frame->Idle();}
   static void Display(void) {frame->Display();}
