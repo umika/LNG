@@ -12,7 +12,7 @@ public:
   static std::string const default_resource_dir;
   static GLuint const default_depth;
   static LNGsize const default_size;
-  bool flag_loading;
+  bool flag_loading, flag_block;
   GLubyte *buffer;
   GLuint depth;
   LNGsize size;
@@ -23,6 +23,7 @@ public:
   virtual void Finalize(void);
   virtual GLuint Load(std::string &filename,
     std::string const &resource_dir=default_resource_dir);
+  virtual GLubyte AlphaCallback(GLubyte r, GLubyte g, GLubyte b);
   virtual GLubyte *CustomData(LNGsize size, GLubyte *buf);
 };
 
