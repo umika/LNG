@@ -19,8 +19,6 @@ LNGtexture::LNGtexture(bool kb, bool ac, bool cp, bool cd,
 #if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
   cout << "LNGtexture::LNGtexture" << endl;
 #endif
-  if(!buffer) buffer = new GLubyte[depth * asize.w * asize.h];
-  if(!buffer) throw LNGexception("cannot allocate buffer for LNGtexture");
 }
 
 LNGtexture::~LNGtexture()
@@ -86,6 +84,7 @@ GLuint LNGtexture::Load(std::string &filename,
       oss << " texture depth error " << pri.Components;
       throw LNGexception(filepath + oss.str());
     }
+#ifdef _DEBUG
     if(pri.Width != size.w){
       ostringstream oss;
       oss << " texture width error " << pri.Width << ", expected " << size.w;
@@ -96,6 +95,13 @@ GLuint LNGtexture::Load(std::string &filename,
       oss << " texture height error " << pri.Height << ", expected " << size.h;
       throw LNGexception(filepath + oss.str());
     }
+#endif
+    // depth = pri.Components;
+    size.w = pri.Width;
+    size.h = pri.Height;
+    GLubyte *buf = 0;
+    if(!buf) buf = new GLubyte[depth * size.w * size.h];
+    if(!buf) throw LNGexception("cannot allocate buf for LNGtexture");
     for(int y = 0; y < pri.Height; y++){
       for(int x = 0; x < pri.Width; x++){
         int s = depth - 1;
@@ -103,20 +109,31 @@ GLuint LNGtexture::Load(std::string &filename,
         int q = r * depth;
         if(pri.Components == 1){
           int p = pri.Data[r] * s;
-          for(int j = 0; j < s; j++) buffer[q + j] = pri.Palette[p + j];
+          for(int j = 0; j < s; j++) buf[q + j] = pri.Palette[p + j];
         }else{
-          for(int j = 0; j < s; j++) buffer[q + j] = pri.Data[q + j];
+          for(int j = 0; j < s; j++) buf[q + j] = pri.Data[q + j];
         }
-        if(use_alphacallback) buffer[q + 3] = AlphaCallback(
-          buffer[q + 0], buffer[q + 1], buffer[q + 2]);
-        else buffer[q + 3] = (pri.Components == 1) ? 255 : pri.Data[q + 3];
-        if(use_custompixel) CustomPixel(&buffer[q]);
+        if(use_alphacallback)
+          buf[q + 3] = AlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
+        else buf[q + 3] = (pri.Components == 1) ? 255 : pri.Data[q + 3];
+        if(use_custompixel) CustomPixel(&buf[q]);
       }
     }
-    if(use_customdata) CustomData(buffer);
+    if(use_customdata) CustomData(buf);
+    if(keep_buffer){
+      if(!buffer) buffer = new GLubyte[depth * size.w * size.h];
+      if(!buffer) throw LNGexception("cannot allocate buffer for LNGtexture");
+      for(int y = 0; y < pri.Height; y++){
+        for(int x = 0; x < pri.Width; x++){
+          int q = (y * pri.Width + x) * depth;
+          for(int j = 0; j < depth; j++) buffer[q + j] = buf[q + j];
+        }
+      }
+    }
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, pri.Width, pri.Height, 0,
-      GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+      GL_RGBA, GL_UNSIGNED_BYTE, buf);
+    if(buf){ delete[] buf; buf = 0; }
     free(pri.Data);
   }
   if(pri.Palette) free(pri.Palette);
