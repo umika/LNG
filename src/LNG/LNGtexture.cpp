@@ -10,8 +10,10 @@ string const LNGtexture::default_resource_dir("resource");
 GLuint const LNGtexture::default_depth = 4;
 LNGsize const LNGtexture::default_size(256, 256);
 
-LNGtexture::LNGtexture(GLuint adepth, LNGsize asize) :
-  flag_loading(true), flag_block(false),
+LNGtexture::LNGtexture(bool kb, bool ac, bool cp, bool cd,
+  GLuint adepth, LNGsize asize) : loading(true), blocking(false),
+  keep_buffer(kb), use_alphacallback(ac),
+  use_custompixel(cp), use_customdata(cd),
   buffer(0), depth(adepth), size(asize), id(0)
 {
 #if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
@@ -34,7 +36,7 @@ void LNGtexture::Finalize(void)
 #if defined( __TRACE_FINALIZATION__ ) || defined( _DEBUG )
   cout << "LNGtexture::Finalize" << endl;
 #endif
-  if(!flag_loading && buffer){
+  if(!loading && buffer){
 #if defined( __TRACE_FINALIZATION__ ) || defined( _DEBUG )
     cout << "finalize texture id: " << id << endl;
 #endif
@@ -45,8 +47,8 @@ void LNGtexture::Finalize(void)
 GLuint LNGtexture::Load(std::string &filename,
   std::string const &resource_dir)
 {
-  if(flag_block) return 0;
-  flag_block = true;
+  if(blocking) return 0;
+  blocking = true;
 #if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
   cout << "LNGtexture::Load" << endl;
 #endif
@@ -105,33 +107,25 @@ GLuint LNGtexture::Load(std::string &filename,
         }else{
           for(int j = 0; j < s; j++) buffer[q + j] = pri.Data[q + j];
         }
-        buffer[q + 3] = AlphaCallback(buffer[q], buffer[q + 1], buffer[q + 2]);
+        if(use_alphacallback) buffer[q + 3] = AlphaCallback(
+          buffer[q + 0], buffer[q + 1], buffer[q + 2]);
+        else buffer[q + 3] = (pri.Components == 1) ? 255 : pri.Data[q + 3];
+        if(use_custompixel) CustomPixel(&buffer[q]);
       }
     }
+    if(use_customdata) CustomData(buffer);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, pri.Width, pri.Height, 0,
       GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     free(pri.Data);
   }
   if(pri.Palette) free(pri.Palette);
-  flag_loading = false;
-  flag_block = false;
+  loading = false;
+  blocking = false;
   return id;
 }
 
-GLubyte LNGtexture::AlphaCallback(GLubyte r, GLubyte g, GLubyte b)
-{
-  // GLubyte a = 255 - (r + g + b) / 3;
-  GLubyte a = 255 * (r + g + b) / (255 * 3);
-  return a & 0x00FF;
-}
-
-GLubyte *LNGtexture::CustomData(LNGsize size, GLubyte *buf)
-{
-  return buf;
-}
-
-LNGloader::LNGloader(int size) : flag_loading(true)
+LNGloader::LNGloader(int size) : loading(true)
 {
   if(!textures) textures = new deque<LNGtexture *>(size);
   if(!textures) throw LNGexception("cannot create std::deque<LNGtexture *>");
@@ -161,11 +155,11 @@ void LNGloader::LoadNext(void)
   bool exist = false;
   deque<LNGtexture *>::iterator it;
   for(it = textures->begin(); it != textures->end(); ++it){
-    if(!(*it)->flag_loading) continue;
-    if((*it)->flag_block) continue;
+    if(!(*it)->loading) continue;
+    if((*it)->blocking) continue;
     GLuint id = (*it)->Load(string("72dpi.png"));
     exist = true;
     break; // load only 1 texture
   }
-  if(!exist) flag_loading = false;
+  if(!exist) loading = false;
 }

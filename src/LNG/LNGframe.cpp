@@ -115,7 +115,7 @@ void LNGframe::Timer(int dt)
 void LNGframe::Idle(void)
 {
   if(done) Quit(0);
-  if(loader->flag_loading) loader->LoadNext();
+  if(loader->loading) loader->LoadNext();
 }
 
 void LNGframe::Update(void)
