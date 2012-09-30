@@ -19,7 +19,7 @@ public:
   static LNGpoint const default_pos;
 protected:
   bool done;
-  LNGclock *fps;
+  LNGclock *clk;
   LNGdispatcher *dispatcher;
   LNGloader *loader;
 public:

@@ -9,18 +9,20 @@
 
 class LNGclock {
 public:
-  bool flag_show;
-  LNGcoord3f pos;
-  LNGcolor4f col;
+  LNGcoord3f fps_pos;
+  LNGcolor4f fps_col;
   static LNGcoord3f const default_pos;
   static LNGcolor4f const default_col;
 protected:
   GLuint const fps_desired;
+  bool fps_visible;
   GLuint fps, fps_clk, fps_pclk, fps_nclk, frames;
 public:
   LNGclock(GLuint a_fps_desired);
   virtual ~LNGclock();
-  GLuint desired(void) {return fps_desired;}
+  GLuint FPSdesired(void) {return fps_desired;}
+  virtual bool FPSvisible(void) {return fps_visible;}
+  virtual bool FPSvisible(bool visible) {return fps_visible = visible;}
   virtual void FPS(void);
   virtual void FPSdisplay(void);
 };

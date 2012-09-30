@@ -18,9 +18,9 @@ using namespace std;
 TestLNGsphere::TestLNGsphere() : distance(5.0),
   angle(LNGcoord3f(0.0, 0.0, 0.0)), prev(LNGpoint(0, 0))
 {
-  // fps->flag_show = false;
-  fps->pos = LNGcoord3f(-0.5, 0.8, -0.8);
-  fps->col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
+  // clk->FPSvisible(false);
+  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
+  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
 }
 
 TestLNGsphere::~TestLNGsphere()

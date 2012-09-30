@@ -22,9 +22,9 @@ TestLNG::TestLNG() : distance(5.0), box(1.5), radius(0.5),
   , glui(0), view_rot(0)
 #endif
 {
-  // fps->flag_show = false;
-  fps->pos = LNGcoord3f(-0.5, 0.8, -0.8);
-  fps->col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
+  // clk->FPSvisible(false);
+  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
+  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
 }
 
 TestLNG::~TestLNG()

@@ -10,8 +10,8 @@ LNGcoord3f const LNGclock::default_pos(0.0, 0.0, 0.0);
 LNGcolor4f const LNGclock::default_col(1.0, 1.0, 1.0, 1.0);
 
 LNGclock::LNGclock(GLuint a_fps_desired) :
-  flag_show(true), pos(default_pos), col(default_col),
-  fps_desired(a_fps_desired),
+  fps_pos(default_pos), fps_col(default_col),
+  fps_desired(a_fps_desired), fps_visible(true),
   fps(0), fps_clk(0), fps_pclk(0), fps_nclk(0), frames(0)
 {
 }
@@ -33,15 +33,15 @@ void LNGclock::FPS(void)
 
 void LNGclock::FPSdisplay(void)
 {
-  if(!flag_show) return;
+  if(!FPSvisible()) return;
   ostringstream oss;
   oss << fps << " FPS";
   string &s = oss.str();
   glDisable(GL_TEXTURE_2D);
-  glColor4f(col.r, col.g, col.b, col.a);
+  glColor4f(fps_col.r, fps_col.g, fps_col.b, fps_col.a);
   // glWindowPos2f(0.0, 0.0);
   // glRasterPos2f(0.0, 0.0);
-  glRasterPos3f(pos.x, pos.y, pos.z);
+  glRasterPos3f(fps_pos.x, fps_pos.y, fps_pos.z);
   for(string::iterator it = s.begin(); it != s.end(); ++it)
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, *it);
   glEnable(GL_TEXTURE_2D);

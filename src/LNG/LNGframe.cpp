@@ -13,13 +13,13 @@ LNGpoint const LNGframe::default_pos(320, 240);
 LNGframe *LNGdispatcher::frame = 0;
 
 LNGframe::LNGframe(GLuint fps_desired) : done(false),
-  fps(0), dispatcher(0), loader(0)
+  clk(0), dispatcher(0), loader(0)
 {
 #if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
   cout << "LNGframe::LNGframe" << endl;
 #endif
-  if(!fps) fps = new LNGclock(fps_desired);
-  if(!fps) throw LNGexception("cannot create LNGclock");
+  if(!clk) clk = new LNGclock(fps_desired);
+  if(!clk) throw LNGexception("cannot create LNGclock");
   if(!dispatcher) dispatcher = new LNGdispatcher(this);
   if(!dispatcher) throw LNGexception("cannot create LNGdispatcher");
   atexit(dispatcher->Finalize);
@@ -42,7 +42,7 @@ void LNGframe::Finalize(void)
 #endif
   if(loader){ delete loader; loader = 0; }
   if(dispatcher){ delete dispatcher; dispatcher = 0; }
-  if(fps){ delete fps; fps = 0; }
+  if(clk){ delete clk; clk = 0; }
 }
 
 void LNGframe::InitFrame(int *ac, char **av, std::string &title,
@@ -105,10 +105,10 @@ void LNGframe::InitGL(void)
 
 void LNGframe::Timer(int dt)
 {
-  GLuint f = fps->desired();
+  GLuint f = clk->FPSdesired();
   if(dt > f) dt = 0;
   glutTimerFunc(1000 / f, dispatcher->Timer, ++dt);
-  fps->FPS();
+  clk->FPS();
   Update();
 }
 
@@ -175,7 +175,7 @@ void LNGframe::Display(void)
   DisplayBefore();
   ChangeView();
   ChangeAngle();
-  fps->FPSdisplay();
+  clk->FPSdisplay();
   DisplayDraw();
   DisplayAfter();
 }
@@ -197,7 +197,7 @@ void LNGframe::KeyPress(unsigned char key, int x, int y)
 
 void LNGframe::SpecialKeyPress(int key, int x, int y)
 {
-  if(key == GLUT_KEY_END) fps->flag_show = !fps->flag_show;
+  if(key == GLUT_KEY_END) clk->FPSvisible(!clk->FPSvisible());
 }
 
 void LNGframe::MouseAction(int button, int state, int x, int y)
