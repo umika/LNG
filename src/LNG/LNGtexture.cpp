@@ -214,7 +214,8 @@ void LNGloader::LoadNext(void)
   for(it = textures->begin(); it != textures->end(); ++it){
     if(!(*it)->loading) continue;
     if((*it)->blocking) continue;
-    GLuint id = (*it)->Load(string("72dpi.png"), true);
+//    GLuint id = (*it)->Load(string("72dpi.png"), true);
+    GLuint id = (*it)->Load(string("72dpi_ascii_reigasou_16x16.png"), true);
     exist = true;
     break; // load only 1 texture
   }
