@@ -119,16 +119,17 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
       for(int x = 0; x < pri.Width; x++){
         int s = depth - 1;
         int r = y * pri.Width + x;
-        int q = r * depth;
+        int q = ((pri.Height - 1 - y) * pri.Width + x) * depth; // reverse t/b
+        int p = r * depth;
         if(pri.Components == 1){
-          int p = pri.Data[r] * s;
-          for(int j = 0; j < s; j++) buf[q + j] = pri.Palette[p + j];
+          int o = pri.Data[r] * s;
+          for(int j = 0; j < s; j++) buf[q + j] = pri.Palette[o + j];
         }else{
-          for(int j = 0; j < s; j++) buf[q + j] = pri.Data[q + j];
+          for(int j = 0; j < s; j++) buf[q + j] = pri.Data[p + j];
         }
         if(use_alphacallback)
           buf[q + 3] = CustomAlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
-        else buf[q + 3] = (pri.Components == 1) ? 255 : pri.Data[q + 3];
+        else buf[q + 3] = (pri.Components == 1) ? 255 : pri.Data[p + 3];
         if(use_custompixel) CustomPixel(&buf[q]);
       }
     }
@@ -187,7 +188,7 @@ void LNGloader::LoadNext(void)
   for(it = textures->begin(); it != textures->end(); ++it){
     if(!(*it)->loading) continue;
     if((*it)->blocking) continue;
-    GLuint id = (*it)->Load(string("72dpi.png"));
+    GLuint id = (*it)->Load(string("72dpi.png"), true);
     exist = true;
     break; // load only 1 texture
   }
