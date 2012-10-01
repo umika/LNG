@@ -54,7 +54,7 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
   cout << "loading texture: " << filepath;
   cout.flush();
 #endif
-  if(!custom){
+  if(!custom){ // texture is reversed top and bottom when auto loading
     if(keep_buffer)
       throw LNGexception(string("auto loading with keep_buffer: ") + filepath);
     pngInfo pi;
@@ -215,10 +215,11 @@ void LNGloader::LoadNext(void)
     if(!(*it)->loading) continue;
     if((*it)->blocking) continue;
 #if 0
+    GLuint id = (*it)->Load(string("f0.png"), true);
     GLuint id = (*it)->Load(string("72dpi.png"), true);
     GLuint id = (*it)->Load(string("72dpi_ascii_reigasou_16x16.png"), true);
 #else
-    GLuint id = (*it)->Load(string("f0.png"), true);
+    GLuint id = (*it)->Load(string("f1.png"), true);
 #endif
     exist = true;
     break; // load only 1 texture
