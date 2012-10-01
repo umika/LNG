@@ -6,6 +6,7 @@
 #define __LNGtypes_H__
 
 #include <deque>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>

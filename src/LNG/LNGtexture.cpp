@@ -55,6 +55,8 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
   cout.flush();
 #endif
   if(!custom){
+    if(keep_buffer)
+      throw LNGexception(string("auto loading with keep_buffer: ") + filepath);
     pngInfo pi;
     if(use_alphacallback) pngSetAlphaCallback(AlphaCallback);
     id = pngBind(filepath.c_str(), PNG_NOMIPMAP,
@@ -92,6 +94,8 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
   cout << " pPalette: " << (long)pri.Palette << endl;
 #endif
   if(pri.Data){
+    if(pri.Components == 1 && !pri.Palette)
+      throw LNGexception(filepath + " texture palette error NULL");
     if(pri.Components != depth && pri.Components != 1){
       ostringstream oss;
       oss << " texture depth error " << pri.Components;
@@ -115,11 +119,33 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
     GLubyte *buf = 0;
     if(!buf) buf = new GLubyte[depth * size.w * size.h];
     if(!buf) throw LNGexception("cannot allocate buf for LNGtexture");
+#if 0
+    if(pri.Components == 1){
+      ostringstream oss;
+      oss << "index color map of texture: " << filepath;
+      for(int j = 0; j < 256; j++){
+        if(!(j % 8))
+          oss << endl << setw(4) << setfill(' ') << dec << right << j << ": ";
+        if(j % 8) oss << " ";
+        for(int i = 0; i < 3; i++){
+          oss << setw(2) << setfill('0') << hex << right;
+          oss << (int)pri.Palette[j * 3 + i];
+        }
+      }
+      throw LNGexception(oss.str());
+    }
+#else
+    if(pri.Components == 1){ // There is a bug in glpng.lib (index color 125).
+      GLubyte p[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xBF, 0xFF, 0xFF, 0x7F};
+      for(int j = 0; j < sizeof(p) / sizeof(GLubyte); j++)
+        pri.Palette[j] = p[j];
+    }
+#endif
     for(int y = 0; y < pri.Height; y++){
       for(int x = 0; x < pri.Width; x++){
         int s = depth - 1;
-        int r = y * pri.Width + x;
-        int q = ((pri.Height - 1 - y) * pri.Width + x) * depth; // reverse t/b
+        int r = (pri.Height - 1 - y) * pri.Width + x; // reverse top and bottom
+        int q = (y * pri.Width + x) * depth;
         int p = r * depth;
         if(pri.Components == 1){
           int o = pri.Data[r] * s;
