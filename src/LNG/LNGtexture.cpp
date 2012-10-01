@@ -119,7 +119,7 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
     GLubyte *buf = 0;
     if(!buf) buf = new GLubyte[depth * size.w * size.h];
     if(!buf) throw LNGexception("cannot allocate buf for LNGtexture");
-#if 0
+#if 0 // dump index color 125 (256) to check a bug
     if(pri.Components == 1){
       ostringstream oss;
       oss << "index color map of texture: " << filepath;
@@ -216,10 +216,14 @@ void LNGloader::LoadNext(void)
     if((*it)->blocking) continue;
 #if 0
     GLuint id = (*it)->Load(string("f0.png"), true);
-    GLuint id = (*it)->Load(string("72dpi.png"), true);
-    GLuint id = (*it)->Load(string("72dpi_ascii_reigasou_16x16.png"), true);
-#else
     GLuint id = (*it)->Load(string("f1.png"), true);
+    GLuint id = (*it)->Load(string("f2.png"), true);
+    GLuint id = (*it)->Load(string("f3.png"), true);
+    GLuint id = (*it)->Load(string("f4.png"), true);
+    GLuint id = (*it)->Load(string("f5.png"), true);
+    GLuint id = (*it)->Load(string("72dpi.png"), true);
+#else
+    GLuint id = (*it)->Load(string("72dpi_ascii_reigasou_16x16.png"), true);
 #endif
     exist = true;
     break; // load only 1 texture
