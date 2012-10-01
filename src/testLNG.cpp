@@ -123,9 +123,22 @@ void TestLNG::DisplayDraw(void)
   glBegin(GL_QUADS);
   glVertex3f(q,q,q); glVertex3f(p,q,q); glVertex3f(p,p,q); glVertex3f(q,p,q);
   glEnd();
-  glBegin(GL_QUADS);
-  glVertex3f(q,q,p); glVertex3f(p,q,p); glVertex3f(p,p,p); glVertex3f(q,p,p);
-  glEnd();
+  if(loader->loading){
+    glBegin(GL_QUADS);
+    glVertex3f(q,q,p); glVertex3f(p,q,p); glVertex3f(p,p,p); glVertex3f(q,p,p);
+    glEnd();
+  }else{
+    glColor4f(1.0, 1.0, 1.0, 0.7);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, loader->textures->at(0)->id);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(q,q,p);
+    glTexCoord2f(1, 0); glVertex3f(p,q,p);
+    glTexCoord2f(1, 1); glVertex3f(p,p,p);
+    glTexCoord2f(0, 1); glVertex3f(q,p,p);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+  }
   glColor4f(0.0, 1.0, 0.0, 0.3);
   glBegin(GL_QUADS);
   glVertex3f(q,q,q); glVertex3f(q,p,q); glVertex3f(q,p,p); glVertex3f(q,q,p);

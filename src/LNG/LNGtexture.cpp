@@ -10,11 +10,10 @@ string const LNGtexture::default_resource_dir("resource");
 GLuint const LNGtexture::default_depth = 4;
 LNGsize const LNGtexture::default_size(256, 256);
 
-LNGtexture::LNGtexture(bool kb, bool ac, bool cp, bool cd,
+LNGtexture::LNGtexture(bool ac, bool cp, bool cd, bool kb,
   GLuint adepth, LNGsize asize) : loading(true), blocking(false),
-  keep_buffer(kb), use_alphacallback(ac),
-  use_custompixel(cp), use_customdata(cd),
-  buffer(0), depth(adepth), size(asize), id(0)
+  use_alphacallback(ac), use_custompixel(cp), use_customdata(cd),
+  keep_buffer(kb), buffer(0), depth(adepth), size(asize), id(0)
 {
 #if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
   cout << "LNGtexture::LNGtexture" << endl;
@@ -42,7 +41,7 @@ void LNGtexture::Finalize(void)
   if(buffer){ delete[] buffer; buffer = 0; }
 }
 
-GLuint LNGtexture::Load(std::string &filename,
+GLuint LNGtexture::Load(std::string &filename, bool custom,
   std::string const &resource_dir)
 {
   if(blocking) return 0;
@@ -55,6 +54,20 @@ GLuint LNGtexture::Load(std::string &filename,
   cout << "loading texture: " << filepath;
   cout.flush();
 #endif
+  if(!custom){
+    pngInfo pi;
+    if(use_alphacallback) pngSetAlphaCallback(AlphaCallback);
+    id = pngBind(filepath.c_str(), PNG_NOMIPMAP,
+      use_alphacallback ? PNG_CALLBACK : PNG_ALPHA,
+      &pi, GL_CLAMP, GL_NEAREST, GL_NEAREST);
+#if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
+    cout << " id: " << id << endl;
+#endif
+    if(!id) throw LNGexception(string("cannot load texture: ") + filepath);
+    loading = false;
+    blocking = false;
+    return id;
+  }
   glGenTextures(1, &id);
 #if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
   cout << " id: " << id << endl;
@@ -114,7 +127,7 @@ GLuint LNGtexture::Load(std::string &filename,
           for(int j = 0; j < s; j++) buf[q + j] = pri.Data[q + j];
         }
         if(use_alphacallback)
-          buf[q + 3] = AlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
+          buf[q + 3] = CustomAlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
         else buf[q + 3] = (pri.Components == 1) ? 255 : pri.Data[q + 3];
         if(use_custompixel) CustomPixel(&buf[q]);
       }
