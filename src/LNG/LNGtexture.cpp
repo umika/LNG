@@ -118,12 +118,10 @@ GLuint LNGtexture::Load(std::string &filename,
         if(!(j % 8))
           oss << endl << setw(4) << setfill(' ') << dec << right << j << ": ";
         if(j % 8) oss << " ";
-        oss << setw(2) << setfill('0') << hex << right;
-        oss << (png_uint_32)png.palette[j].red;
-        oss << setw(2) << setfill('0') << hex << right;
-        oss << (png_uint_32)png.palette[j].green;
-        oss << setw(2) << setfill('0') << hex << right;
-        oss << (png_uint_32)png.palette[j].blue;
+        for(int i = 0; i < sizeof(png_color) / sizeof(png_byte); i++){
+          oss << setw(2) << setfill('0') << hex << right;
+          oss << (png_uint_32)*((GLubyte *)&png.palette[j] + i);
+        }
       }
       throw LNGexception(oss.str());
     }
