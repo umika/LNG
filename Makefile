@@ -1,12 +1,12 @@
 OUTPUT = glLNG.lib
-LDIR   = libs/
+LDIR   = lib/
 HDIR   = GL/LNG/
 HEADS0 = $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
 HEADS1 = $(HDIR)LNGframe.h $(HDIR)LNGtexture.h $(HDIR)LNGpng.h
 HEADS  = $(HEADS1) $(HEADS0)
 TDIR   = src/
 SDIR   = src/LNG/
-ODIR   = objs/
+ODIR   = obj/
 OBJS0  = $(ODIR)LNGclock.obj $(ODIR)LNGut.obj
 OBJS1  = $(ODIR)LNGframe.obj $(ODIR)LNGtexture.obj $(ODIR)LNGpng.obj
 OBJS   = $(ODIR)LNG3Dframe.obj $(ODIR)LNG2Dframe.obj $(OBJS1) $(OBJS0)
@@ -83,6 +83,6 @@ $(ODIR)pngreview.obj : $(TDIR)$(*B).cpp
 	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
 clean :
-	del objs\*.obj
+	del obj\*.obj
 
 all : clean pngreview.exe $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNGsphere.exe testLNG.exe

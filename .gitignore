@@ -1,4 +1,4 @@
 
 *.obj
 *.exe
-/libs/glLNG.lib
+/lib/glLNG.lib
