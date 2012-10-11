@@ -18,13 +18,15 @@ public:
   GLuint bytes_par_pixel;
   LNGsize size;
   GLuint id;
+  std::string filename, resource_dir;
 public:
-  LNGtexture(bool ac=false, bool cp=false, bool cd=false, bool kb=false,
-    GLuint abpp=default_bytes_par_pixel, LNGsize asize=default_size);
+  LNGtexture(std::string &afilename,
+    bool ac=false, bool cp=false, bool cd=false, bool kb=false,
+    GLuint abpp=default_bytes_par_pixel, LNGsize asize=default_size,
+    std::string const &aresource_dir=default_resource_dir);
   virtual ~LNGtexture();
   virtual void Finalize(void);
-  virtual GLuint Load(std::string &filename,
-    std::string const &resource_dir=default_resource_dir);
+  virtual GLuint Load(void);
   virtual GLubyte AlphaCallback(GLubyte r, GLubyte g, GLubyte b)
 //    {return (255 - (r + g + b) / 3) & 0x00FF;}
     {return (255 * (r + g + b) / (255 * 3)) & 0x00FF;}

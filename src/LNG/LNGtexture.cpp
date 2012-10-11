@@ -10,10 +10,12 @@ string const LNGtexture::default_resource_dir("resource");
 GLuint const LNGtexture::default_bytes_par_pixel = 4;
 LNGsize const LNGtexture::default_size(256, 256);
 
-LNGtexture::LNGtexture(bool ac, bool cp, bool cd, bool kb,
-  GLuint abpp, LNGsize asize) : loading(true), blocking(false),
+LNGtexture::LNGtexture(string &afilename,
+  bool ac, bool cp, bool cd, bool kb, GLuint abpp, LNGsize asize,
+  string const &aresource_dir) : loading(true), blocking(false),
   use_alphacallback(ac), use_custompixel(cp), use_customdata(cd),
-  keep_buffer(kb), buffer(0), bytes_par_pixel(abpp), size(asize), id(0)
+  keep_buffer(kb), buffer(0), bytes_par_pixel(abpp), size(asize), id(0),
+  filename(afilename), resource_dir(aresource_dir)
 {
 #if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
   cout << "LNGtexture::LNGtexture" << endl;
@@ -41,8 +43,7 @@ void LNGtexture::Finalize(void)
   if(buffer){ delete[] buffer; buffer = 0; }
 }
 
-GLuint LNGtexture::Load(std::string &filename,
-  std::string const &resource_dir)
+GLuint LNGtexture::Load(void)
 {
   if(blocking) return 0;
   blocking = true;
@@ -187,7 +188,10 @@ LNGloader::~LNGloader()
 
 void LNGloader::InitLoad(void)
 {
-  for(int i = 0; i < 8; i++) textures->push_back(new LNGtexture());
+  char *fn[] = {"f0.png", "f1.png", "f2.png", "f3.png", "f4.png", "f5.png",
+    "72dpi.png", "72dpi_ascii_reigasou_16x16.png"};
+  for(int i = 0; i < sizeof(fn) / sizeof(fn[0]); i++)
+    textures->push_back(new LNGtexture(string(fn[i])));
 }
 
 void LNGloader::LoadNext(void)
@@ -197,17 +201,7 @@ void LNGloader::LoadNext(void)
   for(it = textures->begin(); it != textures->end(); ++it){
     if(!(*it)->loading) continue;
     if((*it)->blocking) continue;
-#if 0
-    GLuint id = (*it)->Load(string("f0.png"));
-    GLuint id = (*it)->Load(string("f1.png"));
-    GLuint id = (*it)->Load(string("f2.png"));
-    GLuint id = (*it)->Load(string("f3.png"));
-    GLuint id = (*it)->Load(string("f4.png"));
-    GLuint id = (*it)->Load(string("f5.png"));
-    GLuint id = (*it)->Load(string("72dpi.png"));
-#else
-    GLuint id = (*it)->Load(string("72dpi_ascii_reigasou_16x16.png"));
-#endif
+    GLuint id = (*it)->Load();
     exist = true;
     break; // load only 1 texture
   }
