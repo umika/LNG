@@ -17,13 +17,18 @@ using namespace std;
 
 TestLNG3D::TestLNG3D() : angle(0)
 {
-  // clk->FPSvisible(false);
-  clk->fps_pos = LNGcoord3f(-0.9, -0.5, 0.1);
-  clk->fps_col = LNGcolor4f(0.4, 0.2, 0.8, 0.9);
 }
 
 TestLNG3D::~TestLNG3D()
 {
+}
+
+void TestLNG3D::InitClk(GLuint fps_desired)
+{
+  LNG3Dframe::InitClk(fps_desired);
+  // clk->FPSvisible(false);
+  clk->fps_pos = LNGcoord3f(-0.9, -0.5, 0.1);
+  clk->fps_col = LNGcolor4f(0.4, 0.2, 0.8, 0.9);
 }
 
 void TestLNG3D::Update(void)

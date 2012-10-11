@@ -15,6 +15,7 @@ protected:
 public:
   TestLNGsphere();
   virtual ~TestLNGsphere();
+  virtual void InitClk(GLuint fps_desired=LNGframe::default_fps);
   virtual void InitGL(void);
   virtual void Update(void);
   virtual void ChangeAngle(void);

@@ -22,9 +22,6 @@ TestLNG::TestLNG() : distance(5.0), box(1.5), radius(0.5),
   , glui(0), view_rot(0)
 #endif
 {
-  // clk->FPSvisible(false);
-  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
-  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
 }
 
 TestLNG::~TestLNG()
@@ -38,6 +35,14 @@ void TestLNG::Finalize(void)
   if(glui) { delete glui; glui = 0; };
 #endif
   LNG3Dframe::Finalize();
+}
+
+void TestLNG::InitClk(GLuint fps_desired)
+{
+  LNG3Dframe::InitClk(fps_desired);
+  // clk->FPSvisible(false);
+  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
+  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
 }
 
 void TestLNG::InitGL(void)

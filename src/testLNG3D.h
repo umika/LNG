@@ -13,6 +13,7 @@ protected:
 public:
   TestLNG3D();
   virtual ~TestLNG3D();
+  virtual void InitClk(GLuint fps_desired=LNGframe::default_fps);
   virtual void Update(void);
   virtual void ChangeAngle(void);
   virtual void DisplayDraw(void);

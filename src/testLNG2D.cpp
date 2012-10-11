@@ -17,13 +17,18 @@ using namespace std;
 
 TestLNG2D::TestLNG2D()
 {
-  // clk->FPSvisible(false);
-  clk->fps_pos = LNGcoord3f(-0.9, -0.5, 0.1);
-  clk->fps_col = LNGcolor4f(0.8, 0.4, 0.2, 0.9);
 }
 
 TestLNG2D::~TestLNG2D()
 {
+}
+
+void TestLNG2D::InitClk(GLuint fps_desired)
+{
+  LNG2Dframe::InitClk(fps_desired);
+  // clk->FPSvisible(false);
+  clk->fps_pos = LNGcoord3f(-0.9, -0.5, 0.1);
+  clk->fps_col = LNGcolor4f(0.8, 0.4, 0.2, 0.9);
 }
 
 void TestLNG2D::DisplayDraw(void)
