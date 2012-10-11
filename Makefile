@@ -1,6 +1,6 @@
 OUTPUT = glLNG.lib
 LDIR   = lib/
-HDIR   = include/GL/LNG/
+HDIR   = include/LNG/
 HEADS0 = $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
 HEADS1 = $(HDIR)LNGframe.h $(HDIR)LNGtexture.h $(HDIR)LNGpng.h
 HEADS  = $(HEADS1) $(HEADS0)

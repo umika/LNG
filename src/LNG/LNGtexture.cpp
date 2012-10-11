@@ -2,7 +2,7 @@
   LNGtexture.cpp
 */
 
-#include <GL/LNG/LNGtexture.h>
+#include <LNG/LNGtexture.h>
 
 using namespace std;
 

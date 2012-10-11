@@ -5,7 +5,7 @@
 #ifndef __testLNG3D_H__
 #define __testLNG3D_H__
 
-#include <GL/LNG/LNG3Dframe.h>
+#include <LNG/LNG3Dframe.h>
 
 class TestLNG3D : public LNG3Dframe {
 protected:

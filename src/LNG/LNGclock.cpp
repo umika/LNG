@@ -2,7 +2,7 @@
   LNGclock.cpp
 */
 
-#include <GL/LNG/LNGclock.h>
+#include <LNG/LNGclock.h>
 
 using namespace std;
 

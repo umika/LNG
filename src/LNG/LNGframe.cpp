@@ -2,7 +2,7 @@
   LNGframe.cpp
 */
 
-#include <GL/LNG/LNGframe.h>
+#include <LNG/LNGframe.h>
 
 using namespace std;
 

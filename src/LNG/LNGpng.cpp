@@ -2,7 +2,7 @@
   LNGpng.cpp
 */
 
-#include <GL/LNG/LNGpng.h>
+#include <LNG/LNGpng.h>
 
 using namespace std;
 

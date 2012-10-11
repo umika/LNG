@@ -5,7 +5,7 @@
 #ifndef __testLNG_H__
 #define __testLNG_H__
 
-#include <GL/LNG/LNG3Dframe.h>
+#include <LNG/LNG3Dframe.h>
 
 #ifdef __TEST_GLUI__
 #define GLUIDLL

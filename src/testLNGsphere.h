@@ -5,7 +5,7 @@
 #ifndef __testLNGsphere_H__
 #define __testLNGsphere_H__
 
-#include <GL/LNG/LNG3Dframe.h>
+#include <LNG/LNG3Dframe.h>
 
 class TestLNGsphere : public LNG3Dframe {
 protected:

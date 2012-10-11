@@ -5,7 +5,7 @@
 #ifndef __LNGtexture_H__
 #define __LNGtexture_H__
 
-#include <GL/LNG/LNGpng.h>
+#include <LNG/LNGpng.h>
 
 class LNGtexture {
 public:

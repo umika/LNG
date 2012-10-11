@@ -5,7 +5,7 @@
 #ifndef __LNGpng_H__
 #define __LNGpng_H__
 
-#include <GL/LNG/LNGut.h>
+#include <LNG/LNGut.h>
 
 class LNGpng {
 public:
