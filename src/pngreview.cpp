@@ -14,7 +14,7 @@
 
 // #include <stdint.h> // *** for int32_t but is not supported before C99 ***
 
-#include <GL/zlib.h> // for crc32
+#include <zlib.h> // for crc32
 
 using namespace std;
 

@@ -14,9 +14,9 @@
 #include <cstdlib>
 #include <cstdio>
 
+#include <zlib.h>
+#include <png.h>
 #include <GL/glut.h>
-#include <GL/zlib.h>
-#include <GL/png.h>
 
 #define default_LNGexception_str "default LNGexception"
 

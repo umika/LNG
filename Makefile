@@ -1,6 +1,6 @@
 OUTPUT = glLNG.lib
 LDIR   = lib/
-HDIR   = GL/LNG/
+HDIR   = include/GL/LNG/
 HEADS0 = $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
 HEADS1 = $(HDIR)LNGframe.h $(HDIR)LNGtexture.h $(HDIR)LNGpng.h
 HEADS  = $(HEADS1) $(HEADS0)
@@ -15,7 +15,7 @@ CC     = cl
 CPPTR0 = $(TRACE_CONSTRUCTION) $(TRACE_DESTRUCTION)
 CPPTR1 = $(TRACE_CREATION) $(TRACE_FINALIZATION)
 CPPDEF = $(TEST_GLUI)
-CFLAGS = $(CPPDEF) $(CPPTR1) $(CPPTR0) -nologo -EHsc -I.
+CFLAGS = $(CPPDEF) $(CPPTR1) $(CPPTR0) -nologo -EHsc -Iinclude
 SUBSYS = -SUBSYSTEM:console
 NOLIB  = -NODEFAULTLIB:libc
 LOPT   = -nologo -link
