@@ -79,8 +79,7 @@ GLuint LNGtexture::Load(void)
   cout << " png depth: " << png.png_depth << endl;
   cout << " p_depth, b_depth: " << png.p_depth << ", " << png.b_depth << endl;
   cout << " pals, num_pals: " << png.pals << ", " << png.num_pals << endl;
-  cout << " alpha: " << png.alpha << endl;
-  cout << " row_bytes: " << png.row_bytes << endl;
+  cout << " alpha, row_bytes: " << png.alpha << ", " << png.row_bytes << endl;
   cout << " pData: " << setw(8) << setfill('0') << hex << right;
   cout << (png_uint_32)png.image << endl;
   cout << " pPalette: " << setw(8) << setfill('0') << hex << right;
@@ -89,7 +88,7 @@ GLuint LNGtexture::Load(void)
   if(png.image){
     if(png.pals && !png.palette)
       throw LNGexception(filepath + " texture palette error NULL");
-    if(!png.pals && png.alpha != 4){ // != bytes_par_pixel){
+    if(!png.pals && (png.alpha && !png.alpha)){ // through (!= bytes_par_pixel)
       ostringstream oss;
       oss << " texture depth error " << png.depth;
       throw LNGexception(filepath + oss.str());
@@ -133,16 +132,18 @@ GLuint LNGtexture::Load(void)
         int s = bytes_par_pixel - 1;
         int r = y * size.w + x;
         int q = r * bytes_par_pixel;
+        int p = png.alpha ? q : r * s;
         if(png.pals){
-          int p = png.image[r];
+          int o = png.image[r];
           for(int j = 0; j < sizeof(png_color) / sizeof(png_byte); j++)
-            buf[q + j] = *((GLubyte *)&png.palette[p] + j);
+            buf[q + j] = *((GLubyte *)&png.palette[o] + j);
         }else{
-          for(int j = 0; j < s; j++) buf[q + j] = png.image[r * s + j]; // RGB
+          for(int j = 0; j < s; j++) buf[q + j] = png.image[p + j];
         }
         if(use_alphacallback)
           buf[q + 3] = AlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
-        else buf[q + 3] = png.pals ? 255 : 255; // png.image[q + 3]; // A
+        else
+          buf[q + 3] = png.pals ? 255 : (png.alpha ? png.image[q + 3] : 255);
         if(use_custompixel) CustomPixel(&buf[q]);
       }
     }

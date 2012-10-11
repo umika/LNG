@@ -74,11 +74,11 @@ bool LNGpng::LoadRaw(string &filepath)
     &size.w, &size.h, (int *)&depth, (int *)&col_type,
     (int *)&interlace_type, (int *)&compress_type, (int *)&filter_type);
   png_depth = depth; p_depth = depth == 16 ? 8 : depth; b_depth = 0; pals = 0;
-  alpha = col_type & 4;
+  alpha = col_type & PNG_COLOR_MASK_ALPHA;
+  // if(alpha){ png_set_strip_alpha(png_ptr); alpha = 0; }
   if(col_type == PNG_COLOR_TYPE_RGB || col_type == PNG_COLOR_TYPE_RGB_ALPHA)
-    b_depth = png_depth = 24;
+    b_depth = png_depth = alpha ? 32 : 24;
   else pals = 1 << (b_depth = depth == 2 ? 4 : p_depth);
-  if(col_type & PNG_COLOR_MASK_ALPHA) png_set_strip_alpha(png_ptr);
   if(png_depth == 2) png_set_read_user_transform_fn(png_ptr, C4hFunc);
   else if(png_depth == 16) png_set_strip_16(png_ptr);
   // if(col_type == PNG_COLOR_TYPE_RGB || col_type == PNG_COLOR_TYPE_RGB_ALPHA)
@@ -99,7 +99,7 @@ bool LNGpng::LoadRaw(string &filepath)
       }
     }
   }
-  row_bytes = (size.w * b_depth + 31) / 32 * 4;
+  row_bytes = (size.w * b_depth + 31) >> 5; row_bytes <<= 2;
   if(!result || !(image = new GLubyte[row_bytes * size.h])) result = false;
   else{
     GLubyte **rows = new GLubyte *[size.h];
