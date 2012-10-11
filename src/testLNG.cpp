@@ -119,18 +119,32 @@ void TestLNG::DisplayDraw(void)
   glDisable(GL_TEXTURE_2D);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
-  glColor4f(1.0, 0.0, 0.0, 0.3);
-  glBegin(GL_QUADS);
-  glVertex3f(q,q,q); glVertex3f(p,q,q); glVertex3f(p,p,q); glVertex3f(q,p,q);
-  glEnd();
   if(loader->loading){
+    glColor4f(1.0, 0.0, 0.0, 0.3);
+    glBegin(GL_QUADS);
+    glVertex3f(q,q,q); glVertex3f(p,q,q); glVertex3f(p,p,q); glVertex3f(q,p,q);
+    glEnd();
+  }else{
+    glColor4f(1.0, 1.0, 1.0, 0.7);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, loader->textures->at(0)->id);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(q,q,q);
+    glTexCoord2f(1, 0); glVertex3f(p,q,q);
+    glTexCoord2f(1, 1); glVertex3f(p,p,q);
+    glTexCoord2f(0, 1); glVertex3f(q,p,q);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+  }
+  if(loader->loading){
+    glColor4f(1.0, 0.0, 0.0, 0.3);
     glBegin(GL_QUADS);
     glVertex3f(q,q,p); glVertex3f(p,q,p); glVertex3f(p,p,p); glVertex3f(q,p,p);
     glEnd();
   }else{
     glColor4f(1.0, 1.0, 1.0, 0.7);
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, loader->textures->at(0)->id);
+    glBindTexture(GL_TEXTURE_2D, loader->textures->at(1)->id);
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(q,q,p);
     glTexCoord2f(1, 0); glVertex3f(p,q,p);
@@ -139,20 +153,74 @@ void TestLNG::DisplayDraw(void)
     glEnd();
     glDisable(GL_TEXTURE_2D);
   }
-  glColor4f(0.0, 1.0, 0.0, 0.3);
-  glBegin(GL_QUADS);
-  glVertex3f(q,q,q); glVertex3f(q,p,q); glVertex3f(q,p,p); glVertex3f(q,q,p);
-  glEnd();
-  glBegin(GL_QUADS);
-  glVertex3f(p,q,q); glVertex3f(p,p,q); glVertex3f(p,p,p); glVertex3f(p,q,p);
-  glEnd();
-  glColor4f(0.0, 0.0, 1.0, 0.3);
-  glBegin(GL_QUADS);
-  glVertex3f(q,q,q); glVertex3f(q,q,p); glVertex3f(p,q,p); glVertex3f(p,q,q);
-  glEnd();
-  glBegin(GL_QUADS);
-  glVertex3f(q,p,q); glVertex3f(q,p,p); glVertex3f(p,p,p); glVertex3f(p,p,q);
-  glEnd();
+  if(loader->loading){
+    glColor4f(0.0, 1.0, 0.0, 0.3);
+    glBegin(GL_QUADS);
+    glVertex3f(q,q,q); glVertex3f(q,p,q); glVertex3f(q,p,p); glVertex3f(q,q,p);
+    glEnd();
+  }else{
+    glColor4f(1.0, 1.0, 1.0, 0.7);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, loader->textures->at(2)->id);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(q,q,q);
+    glTexCoord2f(1, 0); glVertex3f(q,p,q);
+    glTexCoord2f(1, 1); glVertex3f(q,p,p);
+    glTexCoord2f(0, 1); glVertex3f(q,q,p);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+  }
+  if(loader->loading){
+    glColor4f(0.0, 1.0, 0.0, 0.3);
+    glBegin(GL_QUADS);
+    glVertex3f(p,q,q); glVertex3f(p,p,q); glVertex3f(p,p,p); glVertex3f(p,q,p);
+    glEnd();
+  }else{
+    glColor4f(1.0, 1.0, 1.0, 0.7);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, loader->textures->at(3)->id);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(p,q,q);
+    glTexCoord2f(1, 0); glVertex3f(p,p,q);
+    glTexCoord2f(1, 1); glVertex3f(p,p,p);
+    glTexCoord2f(0, 1); glVertex3f(p,q,p);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+  }
+  if(loader->loading){
+    glColor4f(0.0, 0.0, 1.0, 0.3);
+    glBegin(GL_QUADS);
+    glVertex3f(q,q,q); glVertex3f(q,q,p); glVertex3f(p,q,p); glVertex3f(p,q,q);
+    glEnd();
+  }else{
+    glColor4f(1.0, 1.0, 1.0, 0.7);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, loader->textures->at(4)->id);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(q,q,q);
+    glTexCoord2f(1, 0); glVertex3f(q,q,p);
+    glTexCoord2f(1, 1); glVertex3f(p,q,p);
+    glTexCoord2f(0, 1); glVertex3f(p,q,q);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+  }
+  if(loader->loading){
+    glColor4f(0.0, 0.0, 1.0, 0.3);
+    glBegin(GL_QUADS);
+    glVertex3f(q,p,q); glVertex3f(q,p,p); glVertex3f(p,p,p); glVertex3f(p,p,q);
+    glEnd();
+  }else{
+    glColor4f(1.0, 1.0, 1.0, 0.7);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, loader->textures->at(5)->id);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(q,p,q);
+    glTexCoord2f(1, 0); glVertex3f(q,p,p);
+    glTexCoord2f(1, 1); glVertex3f(p,p,p);
+    glTexCoord2f(0, 1); glVertex3f(p,p,q);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+  }
   glDisable(GL_BLEND);
   glEnable(GL_TEXTURE_2D);
 }
