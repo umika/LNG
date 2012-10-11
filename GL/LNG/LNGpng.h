@@ -11,7 +11,7 @@ class LNGpng {
 public:
   LNGsize size;
   GLuint depth, col_type, interlace_type, compress_type, filter_type;
-  GLuint png_depth, p_depth, b_depth, pals, num_pals, alpha;
+  GLuint png_depth, p_depth, b_depth, pals, num_pals, alpha, row_bytes;
   GLubyte *image;
   png_color *palette; // sizeof(png_color) (== 3 bytes) * pals (>= num_pals)
 public:

@@ -80,6 +80,7 @@ GLuint LNGtexture::Load(void)
   cout << " p_depth, b_depth: " << png.p_depth << ", " << png.b_depth << endl;
   cout << " pals, num_pals: " << png.pals << ", " << png.num_pals << endl;
   cout << " alpha: " << png.alpha << endl;
+  cout << " row_bytes: " << png.row_bytes << endl;
   cout << " pData: " << setw(8) << setfill('0') << hex << right;
   cout << (png_uint_32)png.image << endl;
   cout << " pPalette: " << setw(8) << setfill('0') << hex << right;
@@ -137,11 +138,11 @@ GLuint LNGtexture::Load(void)
           for(int j = 0; j < sizeof(png_color) / sizeof(png_byte); j++)
             buf[q + j] = *((GLubyte *)&png.palette[p] + j);
         }else{
-          for(int j = 0; j < s; j++) buf[q + j] = png.image[q + j];
+          for(int j = 0; j < s; j++) buf[q + j] = png.image[r * s + j]; // RGB
         }
         if(use_alphacallback)
           buf[q + 3] = AlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
-        else buf[q + 3] = png.pals ? 255 : png.image[q + 3];
+        else buf[q + 3] = png.pals ? 255 : 255; // png.image[q + 3]; // A
         if(use_custompixel) CustomPixel(&buf[q]);
       }
     }
