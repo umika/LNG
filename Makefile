@@ -1,4 +1,4 @@
-OUTPUT = glLNG.lib
+OUTPUT = liblng.lib
 LDIR   = lib/
 HDIR   = include/LNG/
 HEADS0 = $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
