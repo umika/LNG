@@ -1,16 +1,16 @@
 OUTPUT = glLNG.lib
 LDIR   = libs/
 HDIR   = GL/LNG/
-HEADS0 = $(HDIR)LNGtexture.h $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
-HEADS1 = $(HDIR)LNGframe.h
+HEADS0 = $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
+HEADS1 = $(HDIR)LNGframe.h $(HDIR)LNGtexture.h $(HDIR)LNGpng.h
 HEADS  = $(HEADS1) $(HEADS0)
 TDIR   = src/
 SDIR   = src/LNG/
 ODIR   = objs/
-OBJS0  = $(ODIR)LNGtexture.obj $(ODIR)LNGclock.obj $(ODIR)LNGut.obj
-OBJS1  = $(ODIR)LNGframe.obj
+OBJS0  = $(ODIR)LNGclock.obj $(ODIR)LNGut.obj
+OBJS1  = $(ODIR)LNGframe.obj $(ODIR)LNGtexture.obj $(ODIR)LNGpng.obj
 OBJS   = $(ODIR)LNG3Dframe.obj $(ODIR)LNG2Dframe.obj $(OBJS1) $(OBJS0)
-LIBS   = $(OUTPUT) glpng.lib glui32dll.lib glut32.lib
+LIBS   = $(OUTPUT) zlib1.lib libpng15.lib glui32dll.lib glut32.lib
 CC     = cl
 CPPTR0 = $(TRACE_CONSTRUCTION) $(TRACE_DESTRUCTION)
 CPPTR1 = $(TRACE_CREATION) $(TRACE_FINALIZATION)
@@ -64,7 +64,10 @@ $(ODIR)LNG2Dframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
 $(ODIR)LNGframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
 	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
-$(ODIR)LNGtexture.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
+$(ODIR)LNGtexture.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGpng.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
+
+$(ODIR)LNGpng.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
 	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
 $(ODIR)LNGclock.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
@@ -73,7 +76,13 @@ $(ODIR)LNGclock.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGut.h $(HDIR)LNGt
 $(ODIR)LNGut.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGtypes.h
 	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
+pngreview.exe : $(ODIR)$(*B).obj
+	$(LINK) $(ODIR)$(*B).obj zlib1.lib $(LOPT) $(LFLAGS) -OUT:$(@F)
+
+$(ODIR)pngreview.obj : $(TDIR)$(*B).cpp
+	$(CC) -c $(CFLAGS) $(TDIR)$(*B).cpp -Fo$(ODIR)$(@F)
+
 clean :
 	del objs\*.obj
 
-all : clean $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNGsphere.exe testLNG.exe
+all : clean pngreview.exe $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNGsphere.exe testLNG.exe

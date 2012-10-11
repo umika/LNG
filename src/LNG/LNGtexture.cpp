@@ -7,13 +7,13 @@
 using namespace std;
 
 string const LNGtexture::default_resource_dir("resource");
-GLuint const LNGtexture::default_depth = 4;
+GLuint const LNGtexture::default_bytes_par_pixel = 4;
 LNGsize const LNGtexture::default_size(256, 256);
 
 LNGtexture::LNGtexture(bool ac, bool cp, bool cd, bool kb,
-  GLuint adepth, LNGsize asize) : loading(true), blocking(false),
+  GLuint abpp, LNGsize asize) : loading(true), blocking(false),
   use_alphacallback(ac), use_custompixel(cp), use_customdata(cd),
-  keep_buffer(kb), buffer(0), depth(adepth), size(asize), id(0)
+  keep_buffer(kb), buffer(0), bytes_par_pixel(abpp), size(asize), id(0)
 {
 #if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
   cout << "LNGtexture::LNGtexture" << endl;
@@ -41,7 +41,7 @@ void LNGtexture::Finalize(void)
   if(buffer){ delete[] buffer; buffer = 0; }
 }
 
-GLuint LNGtexture::Load(std::string &filename, bool custom,
+GLuint LNGtexture::Load(std::string &filename,
   std::string const &resource_dir)
 {
   if(blocking) return 0;
@@ -54,25 +54,9 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
   cout << "loading texture: " << filepath;
   cout.flush();
 #endif
-  if(!custom){ // texture is reversed top and bottom when auto loading
-    if(keep_buffer)
-      throw LNGexception(string("auto loading with keep_buffer: ") + filepath);
-    pngInfo pi;
-    if(use_alphacallback) pngSetAlphaCallback(AlphaCallback);
-    id = pngBind(filepath.c_str(), PNG_NOMIPMAP,
-      use_alphacallback ? PNG_CALLBACK : PNG_ALPHA,
-      &pi, GL_CLAMP, GL_NEAREST, GL_NEAREST);
-#if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
-    cout << " id: " << id << endl;
-#endif
-    if(!id) throw LNGexception(string("cannot load texture: ") + filepath);
-    loading = false;
-    blocking = false;
-    return id;
-  }
   glGenTextures(1, &id);
 #if defined( __TRACE_CREATION__ ) || defined( _DEBUG )
-  cout << " id: " << id << endl;
+  cout << " id: " << setw(4) << setfill(' ') << dec << right << id << endl;
 #endif
   if(!id) throw LNGexception(string("cannot generate texture: ") + filepath);
   glBindTexture(GL_TEXTURE_2D, id);
@@ -80,103 +64,104 @@ GLuint LNGtexture::Load(std::string &filename, bool custom,
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  pngRawInfo pri;
-  if(!pngLoadRaw(filepath.c_str(), &pri))
+  LNGpng png;
+  if(!png.LoadRaw(filepath))
     throw LNGexception(string("cannot load texture file: ") + filepath);
 #ifdef _DEBUG
   cout << "File: " << filepath << endl;
-  cout << " Width: " << pri.Width << endl;
-  cout << " Height: " << pri.Height << endl;
-  cout << " Depth: " << pri.Depth << endl;
-  cout << " Alpha: " << pri.Alpha << endl;
-  cout << " Components: " << pri.Components << endl;
-  cout << " pData: " << (long)pri.Data << endl;
-  cout << " pPalette: " << (long)pri.Palette << endl;
+  cout << " id: " << setw(4) << setfill(' ') << dec << right << id << endl;
+  cout << " width, height: " << png.size.w << ", " << png.size.h << endl;
+  cout << " depth, col_type: " << png.depth << ", " << png.col_type << endl;
+  cout << " interlace_type: " << png.interlace_type << endl;
+  cout << " compress_type: " << png.compress_type << endl;
+  cout << " filter_type: " << png.filter_type << endl;
+  cout << " png depth: " << png.png_depth << endl;
+  cout << " p_depth, b_depth: " << png.p_depth << ", " << png.b_depth << endl;
+  cout << " pals, num_pals: " << png.pals << ", " << png.num_pals << endl;
+  cout << " alpha: " << png.alpha << endl;
+  cout << " pData: " << setw(8) << setfill('0') << hex << right;
+  cout << (png_uint_32)png.image << endl;
+  cout << " pPalette: " << setw(8) << setfill('0') << hex << right;
+  cout << (png_uint_32)png.palette << endl;
 #endif
-  if(pri.Data){
-    if(pri.Components == 1 && !pri.Palette)
+  if(png.image){
+    if(png.pals && !png.palette)
       throw LNGexception(filepath + " texture palette error NULL");
-    if(pri.Components != depth && pri.Components != 1){
+    if(!png.pals && png.alpha != 4){ // != bytes_par_pixel){
       ostringstream oss;
-      oss << " texture depth error " << pri.Components;
+      oss << " texture depth error " << png.depth;
       throw LNGexception(filepath + oss.str());
     }
+    // bytes_par_pixel = png.depth;
 #ifdef _DEBUG
-    if(pri.Width != size.w){
+    if(png.size.w != size.w){
       ostringstream oss;
-      oss << " texture width error " << pri.Width << ", expected " << size.w;
+      oss << " texture width error " << png.size.w << ", expected " << size.w;
       throw LNGexception(filepath + oss.str());
     }
-    if(pri.Height != size.h){
+    if(png.size.h != size.h){
       ostringstream oss;
-      oss << " texture height error " << pri.Height << ", expected " << size.h;
+      oss << " texture height error " << png.size.h << ", expected " << size.h;
       throw LNGexception(filepath + oss.str());
     }
 #endif
-    // depth = pri.Components;
-    size.w = pri.Width;
-    size.h = pri.Height;
+    size.w = png.size.w;
+    size.h = png.size.h;
     GLubyte *buf = 0;
-    if(!buf) buf = new GLubyte[depth * size.w * size.h];
+    if(!buf) buf = new GLubyte[bytes_par_pixel * size.w * size.h];
     if(!buf) throw LNGexception("cannot allocate buf for LNGtexture");
-#if 0 // dump index color 125 (256) to check a bug
-    if(pri.Components == 1){
+#ifdef _DEBUG // dump index color 125 (256) to check a palette (exception)
+    if(png.pals){
       ostringstream oss;
       oss << "index color map of texture: " << filepath;
-      for(int j = 0; j < 256; j++){
+      for(int j = 0; j < png.num_pals; j++){
         if(!(j % 8))
           oss << endl << setw(4) << setfill(' ') << dec << right << j << ": ";
         if(j % 8) oss << " ";
-        for(int i = 0; i < 3; i++){
-          oss << setw(2) << setfill('0') << hex << right;
-          oss << (int)pri.Palette[j * 3 + i];
-        }
+        oss << setw(2) << setfill('0') << hex << right;
+        oss << (png_uint_32)png.palette[j].red;
+        oss << setw(2) << setfill('0') << hex << right;
+        oss << (png_uint_32)png.palette[j].green;
+        oss << setw(2) << setfill('0') << hex << right;
+        oss << (png_uint_32)png.palette[j].blue;
       }
       throw LNGexception(oss.str());
     }
-#else
-    if(pri.Components == 1){ // There is a bug in glpng.lib (index color 125).
-      GLubyte p[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xBF, 0xFF, 0xFF, 0x7F};
-      for(int j = 0; j < sizeof(p) / sizeof(GLubyte); j++)
-        pri.Palette[j] = p[j];
-    }
 #endif
-    for(int y = 0; y < pri.Height; y++){
-      for(int x = 0; x < pri.Width; x++){
-        int s = depth - 1;
-        int r = (pri.Height - 1 - y) * pri.Width + x; // reverse top and bottom
-        int q = (y * pri.Width + x) * depth;
-        int p = r * depth;
-        if(pri.Components == 1){
-          int o = pri.Data[r] * s;
-          for(int j = 0; j < s; j++) buf[q + j] = pri.Palette[o + j];
+    for(int y = 0; y < size.h; y++){
+      for(int x = 0; x < size.w; x++){
+        int s = bytes_par_pixel - 1;
+        int r = y * size.w + x;
+        int q = r * bytes_par_pixel;
+        if(png.pals){
+          int p = png.image[r];
+          for(int j = 0; j < sizeof(png_color) / sizeof(png_byte); j++)
+            buf[q + j] = *((GLubyte *)&png.palette[p] + j);
         }else{
-          for(int j = 0; j < s; j++) buf[q + j] = pri.Data[p + j];
+          for(int j = 0; j < s; j++) buf[q + j] = png.image[q + j];
         }
         if(use_alphacallback)
-          buf[q + 3] = CustomAlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
-        else buf[q + 3] = (pri.Components == 1) ? 255 : pri.Data[p + 3];
+          buf[q + 3] = AlphaCallback(buf[q + 0], buf[q + 1], buf[q + 2]);
+        else buf[q + 3] = png.pals ? 255 : png.image[q + 3];
         if(use_custompixel) CustomPixel(&buf[q]);
       }
     }
     if(use_customdata) CustomData(buf);
     if(keep_buffer){
-      if(!buffer) buffer = new GLubyte[depth * size.w * size.h];
+      if(!buffer) buffer = new GLubyte[bytes_par_pixel * size.w * size.h];
       if(!buffer) throw LNGexception("cannot allocate buffer for LNGtexture");
-      for(int y = 0; y < pri.Height; y++){
-        for(int x = 0; x < pri.Width; x++){
-          int q = (y * pri.Width + x) * depth;
-          for(int j = 0; j < depth; j++) buffer[q + j] = buf[q + j];
+      for(int y = 0; y < size.h; y++){
+        for(int x = 0; x < size.w; x++){
+          int q = (y * size.w + x) * bytes_par_pixel;
+          for(int j = 0; j < bytes_par_pixel; j++) buffer[q + j] = buf[q + j];
         }
       }
     }
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, pri.Width, pri.Height, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, size.w, size.h, 0,
       GL_RGBA, GL_UNSIGNED_BYTE, buf);
     if(buf){ delete[] buf; buf = 0; }
-    free(pri.Data);
   }
-  if(pri.Palette) free(pri.Palette);
   loading = false;
   blocking = false;
   return id;
@@ -204,7 +189,7 @@ LNGloader::~LNGloader()
 
 void LNGloader::InitLoad(void)
 {
-  for(int i = 0; i < 3; i++) textures->push_back(new LNGtexture());
+  for(int i = 0; i < 8; i++) textures->push_back(new LNGtexture());
 }
 
 void LNGloader::LoadNext(void)
@@ -215,15 +200,15 @@ void LNGloader::LoadNext(void)
     if(!(*it)->loading) continue;
     if((*it)->blocking) continue;
 #if 0
-    GLuint id = (*it)->Load(string("f0.png"), true);
-    GLuint id = (*it)->Load(string("f1.png"), true);
-    GLuint id = (*it)->Load(string("f2.png"), true);
-    GLuint id = (*it)->Load(string("f3.png"), true);
-    GLuint id = (*it)->Load(string("f4.png"), true);
-    GLuint id = (*it)->Load(string("f5.png"), true);
-    GLuint id = (*it)->Load(string("72dpi.png"), true);
+    GLuint id = (*it)->Load(string("f0.png"));
+    GLuint id = (*it)->Load(string("f1.png"));
+    GLuint id = (*it)->Load(string("f2.png"));
+    GLuint id = (*it)->Load(string("f3.png"));
+    GLuint id = (*it)->Load(string("f4.png"));
+    GLuint id = (*it)->Load(string("f5.png"));
+    GLuint id = (*it)->Load(string("72dpi.png"));
 #else
-    GLuint id = (*it)->Load(string("72dpi_ascii_reigasou_16x16.png"), true);
+    GLuint id = (*it)->Load(string("72dpi_ascii_reigasou_16x16.png"));
 #endif
     exist = true;
     break; // load only 1 texture

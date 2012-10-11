@@ -12,9 +12,10 @@
 #include <string>
 #include <cstdarg>
 #include <cstdlib>
+#include <cstdio>
 
 #include <GL/glut.h>
-#include <GL/glpng.h>
+#include <GL/png.h>
 
 #define default_LNGexception_str "default LNGexception"
 
