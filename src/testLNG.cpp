@@ -42,23 +42,17 @@ void TestLNG::Finalize(void)
 
 void TestLNG::LoadTextures(void)
 {
-  for(int i = 0; i < 6; i++)
-    loader->textures->push_back(
-      new LNGcameleon_texture(i, string("72dpi.png"), false, false, true));
-  char *fn[] = {
-    "72dpi_ascii_reigasou_16x16.png",
-    "72dpi_ascii_reigasou_16x16.png",
-    "72dpi_ascii_reigasou_16x16.png",
-    "72dpi_ascii_reigasou_16x16.png",
-    "72dpi_ascii_reigasou_16x16.png",
-    "72dpi_ascii_reigasou_16x16.png"};
-  for(int i = 0; i < sizeof(fn) / sizeof(fn[0]); i++)
-    loader->textures->push_back(new LNGchar_texture(string(fn[i])));
   for(int i = 0; i < 6; i++){
     ostringstream oss;
     oss << "f" << i << ".png";
     loader->textures->push_back(new LNGtexture(oss.str(), !i));
   }
+  for(int i = 0; i < 6; i++)
+    loader->textures->push_back(
+      new LNGcameleon_texture(i, string("72dpi.png"), false, false, true));
+  char *fn[] = {"72dpi_ascii_reigasou_16x16.png"};
+  for(int i = 0; i < sizeof(fn) / sizeof(fn[0]); i++)
+    loader->textures->push_back(new LNGchar_texture(string(fn[i])));
 }
 
 void TestLNG::InitGL(void)
