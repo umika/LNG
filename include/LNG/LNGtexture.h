@@ -42,7 +42,6 @@ public:
 public:
   LNGloader(int size=0);
   virtual ~LNGloader();
-  virtual void InitLoad(void) {}
   virtual void LoadNext(void);
 };
 
