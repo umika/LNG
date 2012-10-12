@@ -24,16 +24,15 @@ protected:
   LNGclock *clk;
   LNGloader *loader;
 public:
-  LNGframe();
+  LNGframe(GLuint fps_desired=default_fps);
   virtual ~LNGframe();
   virtual void Finalize(void);
-  virtual void InitClk(GLuint fps_desired=default_fps);
   virtual void InitFrame(int *ac, char **av, std::string &title,
     LNGsize size=default_size, LNGpoint pos=default_pos,
     GLuint mode=GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
   virtual void MainLoop(void);
   virtual void Quit(int n);
-  virtual void LoadTextures(void);
+  virtual void LoadTextures(void) {}
   virtual void InitGL(void);
   virtual void Timer(int dt);
   virtual void Idle(void);

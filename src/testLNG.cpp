@@ -22,6 +22,9 @@ TestLNG::TestLNG() : distance(5.0), box(1.5), radius(0.5),
   , glui(0), view_rot(0)
 #endif
 {
+  // clk->FPSvisible(false);
+  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
+  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
 }
 
 TestLNG::~TestLNG()
@@ -37,12 +40,12 @@ void TestLNG::Finalize(void)
   LNG3Dframe::Finalize();
 }
 
-void TestLNG::InitClk(GLuint fps_desired)
+void TestLNG::LoadTextures(void)
 {
-  LNG3Dframe::InitClk(fps_desired);
-  // clk->FPSvisible(false);
-  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
-  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
+  char *fn[] = {"f0.png", "f1.png", "f2.png", "f3.png", "f4.png", "f5.png",
+    "72dpi.png", "72dpi_ascii_reigasou_16x16.png"};
+  for(int i = 0; i < sizeof(fn) / sizeof(fn[0]); i++)
+    loader->textures->push_back(new LNGtexture(string(fn[i])));
 }
 
 void TestLNG::InitGL(void)

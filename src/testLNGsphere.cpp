@@ -18,18 +18,13 @@ using namespace std;
 TestLNGsphere::TestLNGsphere() : distance(5.0),
   angle(LNGcoord3f(0.0, 0.0, 0.0)), prev(LNGpoint(0, 0))
 {
+  // clk->FPSvisible(false);
+  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
+  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
 }
 
 TestLNGsphere::~TestLNGsphere()
 {
-}
-
-void TestLNGsphere::InitClk(GLuint fps_desired)
-{
-  LNG3Dframe::InitClk(fps_desired);
-  // clk->FPSvisible(false);
-  clk->fps_pos = LNGcoord3f(-0.5, 0.8, -0.8);
-  clk->fps_col = LNGcolor4f(0.2, 0.8, 0.4, 0.9);
 }
 
 void TestLNGsphere::InitGL(void)

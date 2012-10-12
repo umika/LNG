@@ -20,8 +20,9 @@ public:
   GLuint id;
   std::string filename, resource_dir;
 public:
+  // kb: keep_buffer, ac: alphacallback, cp: custompixel, cd: customdata
   LNGtexture(std::string &afilename,
-    bool ac=false, bool cp=false, bool cd=false, bool kb=false,
+    bool kb=false, bool ac=false, bool cp=false, bool cd=false,
     GLuint abpp=default_bytes_par_pixel, LNGsize asize=default_size,
     std::string const &aresource_dir=default_resource_dir);
   virtual ~LNGtexture();
@@ -41,7 +42,7 @@ public:
 public:
   LNGloader(int size=0);
   virtual ~LNGloader();
-  virtual void InitLoad(void);
+  virtual void InitLoad(void) {}
   virtual void LoadNext(void);
 };
 

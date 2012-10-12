@@ -12,7 +12,8 @@ LNGpoint const LNGframe::default_pos(320, 240);
 
 LNGframe *LNGdispatcher::frame = 0;
 
-LNGframe::LNGframe() : done(false), dispatcher(0), clk(0), loader(0)
+LNGframe::LNGframe(GLuint fps_desired) : done(false),
+  dispatcher(0), clk(0), loader(0)
 {
 #if defined( __TRACE_CONSTRUCTION__ ) || defined( _DEBUG )
   cout << "LNGframe::LNGframe" << endl;
@@ -20,6 +21,10 @@ LNGframe::LNGframe() : done(false), dispatcher(0), clk(0), loader(0)
   if(!dispatcher) dispatcher = new LNGdispatcher(this);
   if(!dispatcher) throw LNGexception("cannot create LNGdispatcher");
   atexit(dispatcher->Finalize);
+  if(!clk) clk = new LNGclock(fps_desired);
+  if(!clk) throw LNGexception("cannot create LNGclock");
+  if(!loader) loader = new LNGloader();
+  if(!loader) throw LNGexception("cannot create LNGloader");
 }
 
 LNGframe::~LNGframe()
@@ -40,12 +45,6 @@ void LNGframe::Finalize(void)
   if(dispatcher){ delete dispatcher; dispatcher = 0; }
 }
 
-void LNGframe::InitClk(GLuint fps_desired)
-{
-  if(!clk) clk = new LNGclock(fps_desired);
-  if(!clk) throw LNGexception("cannot create LNGclock");
-}
-
 void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   LNGsize size, LNGpoint pos, GLuint mode)
 {
@@ -59,7 +58,6 @@ void LNGframe::InitFrame(int *ac, char **av, std::string &title,
   cout << "size: " << size.w << ',' << size.h << endl;
   cout << "pos: " << pos.x << ',' << pos.y << endl;
 #endif
-  InitClk();
   glutInit(ac, av);
   glutInitDisplayMode(mode);
   glutInitWindowSize(size.w, size.h);
@@ -91,13 +89,6 @@ void LNGframe::Quit(int n)
 {
   glutDestroyWindow(glutGetWindow());
   exit(n); // This will call Finalize() by atexit().
-}
-
-void LNGframe::LoadTextures(void)
-{
-  if(!loader) loader = new LNGloader();
-  if(!loader) throw LNGexception("cannot create LNGloader");
-  loader->InitLoad();
 }
 
 void LNGframe::InitGL(void)

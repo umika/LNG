@@ -11,7 +11,7 @@ GLuint const LNGtexture::default_bytes_par_pixel = 4;
 LNGsize const LNGtexture::default_size(256, 256);
 
 LNGtexture::LNGtexture(string &afilename,
-  bool ac, bool cp, bool cd, bool kb, GLuint abpp, LNGsize asize,
+  bool kb, bool ac, bool cp, bool cd, GLuint abpp, LNGsize asize,
   string const &aresource_dir) : loading(true), blocking(false),
   use_alphacallback(ac), use_custompixel(cp), use_customdata(cd),
   keep_buffer(kb), buffer(0), bytes_par_pixel(abpp), size(asize), id(0),
@@ -186,14 +186,6 @@ LNGloader::~LNGloader()
     }
     delete textures;
   }
-}
-
-void LNGloader::InitLoad(void)
-{
-  char *fn[] = {"f0.png", "f1.png", "f2.png", "f3.png", "f4.png", "f5.png",
-    "72dpi.png", "72dpi_ascii_reigasou_16x16.png"};
-  for(int i = 0; i < sizeof(fn) / sizeof(fn[0]); i++)
-    textures->push_back(new LNGtexture(string(fn[i])));
 }
 
 void LNGloader::LoadNext(void)

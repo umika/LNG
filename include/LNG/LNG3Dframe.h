@@ -9,7 +9,8 @@
 
 class LNG3Dframe : public LNGframe {
 public:
-  LNG3Dframe() {}
+  LNG3Dframe(GLuint fps_desired=LNGframe::default_fps) :
+    LNGframe(fps_desired) {}
   virtual ~LNG3Dframe() {}
   virtual void ChangeAngle(void);
   virtual void Perspective(int w, int h);

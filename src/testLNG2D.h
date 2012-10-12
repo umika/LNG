@@ -11,7 +11,6 @@ class TestLNG2D : public LNG2Dframe {
 public:
   TestLNG2D();
   virtual ~TestLNG2D();
-  virtual void InitClk(GLuint fps_desired=LNGframe::default_fps);
   virtual void DisplayDraw(void);
 };
 
