@@ -28,6 +28,7 @@ public:
   virtual ~LNGtexture();
   virtual void Finalize(void);
   virtual GLuint Load(void);
+  virtual void UpdateBuffer(void);
   virtual GLubyte AlphaCallback(GLubyte r, GLubyte g, GLubyte b)
     {return (255 * (r + g + b) / (255 * 3)) & 0x00FF;}
   virtual GLubyte *CustomPixel(GLubyte *buf) {return buf;}

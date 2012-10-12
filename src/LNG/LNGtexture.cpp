@@ -172,6 +172,15 @@ GLuint LNGtexture::Load(void)
   return id;
 }
 
+void LNGtexture::UpdateBuffer(void)
+{
+  if(!buffer) throw LNGexception(string("texture has no buffer: " + filename));
+  glBindTexture(GL_TEXTURE_2D, id);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  glTexImage2D(GL_TEXTURE_2D, 0, 3, size.w, size.h, 0,
+    GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+}
+
 LNGloader::LNGloader(int size) : loading(true)
 {
   if(!textures) textures = new deque<LNGtexture *>(size);

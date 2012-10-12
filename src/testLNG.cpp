@@ -142,7 +142,7 @@ void TestLNG::DisplayDraw(void)
   }else{
     glColor4f(1.0, 1.0, 1.0, 0.7);
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, loader->textures->at(0)->id);
+    glBindTexture(GL_TEXTURE_2D, loader->At(0)->id);
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(q,q,q);
     glTexCoord2f(1, 0); glVertex3f(p,q,q);
@@ -159,7 +159,7 @@ void TestLNG::DisplayDraw(void)
   }else{
     glColor4f(1.0, 1.0, 1.0, 0.7);
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, loader->textures->at(1)->id);
+    glBindTexture(GL_TEXTURE_2D, loader->At(1)->id);
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(q,q,p);
     glTexCoord2f(1, 0); glVertex3f(p,q,p);
@@ -176,7 +176,7 @@ void TestLNG::DisplayDraw(void)
   }else{
     glColor4f(1.0, 1.0, 1.0, 0.7);
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, loader->textures->at(2)->id);
+    glBindTexture(GL_TEXTURE_2D, loader->At(2)->id);
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(q,q,q);
     glTexCoord2f(1, 0); glVertex3f(q,p,q);
@@ -193,7 +193,7 @@ void TestLNG::DisplayDraw(void)
   }else{
     glColor4f(1.0, 1.0, 1.0, 0.7);
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, loader->textures->at(3)->id);
+    glBindTexture(GL_TEXTURE_2D, loader->At(3)->id);
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(p,q,q);
     glTexCoord2f(1, 0); glVertex3f(p,p,q);
@@ -210,7 +210,7 @@ void TestLNG::DisplayDraw(void)
   }else{
     glColor4f(1.0, 1.0, 1.0, 0.7);
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, loader->textures->at(4)->id);
+    glBindTexture(GL_TEXTURE_2D, loader->At(4)->id);
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(q,q,q);
     glTexCoord2f(1, 0); glVertex3f(q,q,p);
@@ -227,7 +227,7 @@ void TestLNG::DisplayDraw(void)
   }else{
     glColor4f(1.0, 1.0, 1.0, 0.7);
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, loader->textures->at(5)->id);
+    glBindTexture(GL_TEXTURE_2D, loader->At(5)->id);
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(q,p,q);
     glTexCoord2f(1, 0); glVertex3f(q,p,p);
