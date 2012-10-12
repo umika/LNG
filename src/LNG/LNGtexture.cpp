@@ -151,12 +151,16 @@ GLuint LNGtexture::Load(void)
     if(keep_buffer){
       if(!buffer) buffer = new GLubyte[bytes_par_pixel * size.w * size.h];
       if(!buffer) throw LNGexception("cannot allocate buffer for LNGtexture");
+#if 0
       for(int y = 0; y < size.h; y++){
         for(int x = 0; x < size.w; x++){
           int q = (y * size.w + x) * bytes_par_pixel;
           for(int j = 0; j < bytes_par_pixel; j++) buffer[q + j] = buf[q + j];
         }
       }
+#else
+      memcpy(buffer, buf, bytes_par_pixel * size.w * size.h);
+#endif
     }
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, size.w, size.h, 0,
