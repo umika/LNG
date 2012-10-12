@@ -9,6 +9,8 @@
 #include <LNG/LNGclock.h>
 #include <LNG/LNGpng.h>
 #include <LNG/LNGtexture.h>
+#include <LNG/LNGcameleon_texture.h>
+#include <LNG/LNGchar_texture.h>
 
 class LNGframe;
 class LNGdispatcher;

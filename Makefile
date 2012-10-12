@@ -2,16 +2,18 @@ OUTPUT = liblng.lib
 LDIR   = lib/
 HDIR   = include/LNG/
 HEADS0 = $(HDIR)LNGclock.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
-HEADS1 = $(HDIR)LNGchar_texture.h $(HDIR)LNGtexture.h $(HDIR)LNGpng.h
-HEADS2 = $(HDIR)LNGframe.h
-HEADS  = $(HEADS2) $(HEADS1) $(HEADS0)
+HEADS1 = $(HDIR)LNGtexture.h $(HDIR)LNGpng.h
+HEADS2 = $(HDIR)LNGchar_texture.h $(HDIR)LNGcameleon_texture.h
+HEADS3 = $(HDIR)LNGframe.h
+HEADS  = $(HEADS3) $(HEADS2) $(HEADS1) $(HEADS0)
 TDIR   = src/
 SDIR   = src/LNG/
 ODIR   = obj/
 OBJS0  = $(ODIR)LNGclock.obj $(ODIR)LNGut.obj
-OBJS1  = $(ODIR)LNGchar_texture.obj $(ODIR)LNGtexture.obj $(ODIR)LNGpng.obj
-OBJS2  = $(ODIR)LNG3Dframe.obj $(ODIR)LNG2Dframe.obj $(ODIR)LNGframe.obj
-OBJS   = $(OBJS2) $(OBJS1) $(OBJS0)
+OBJS1  = $(ODIR)LNGtexture.obj $(ODIR)LNGpng.obj
+OBJS2  = $(ODIR)LNGchar_texture.obj $(ODIR)LNGcameleon_texture.obj
+OBJS3  = $(ODIR)LNG3Dframe.obj $(ODIR)LNG2Dframe.obj $(ODIR)LNGframe.obj
+OBJS   = $(OBJS3) $(OBJS2) $(OBJS1) $(OBJS0)
 LIBS   = $(OUTPUT) zlib1.lib libpng15.lib glui32dll.lib glut32.lib
 CC     = cl
 CPPTR0 = $(TRACE_CONSTRUCTION) $(TRACE_DESTRUCTION)
@@ -67,6 +69,9 @@ $(ODIR)LNGframe.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HEADS)
 	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
 $(ODIR)LNGchar_texture.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGtexture.h $(HDIR)LNGpng.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
+	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
+
+$(ODIR)LNGcameleon_texture.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGtexture.h $(HDIR)LNGpng.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
 	$(CC) -c $(CFLAGS) $(SDIR)$(*B).cpp -Fo$(ODIR)$(@F)
 
 $(ODIR)LNGtexture.obj : $(SDIR)$(*B).cpp $(HDIR)$(*B).h $(HDIR)LNGpng.h $(HDIR)LNGut.h $(HDIR)LNGtypes.h
