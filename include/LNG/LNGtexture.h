@@ -41,6 +41,10 @@ public:
 public:
   LNGloader(int size=0);
   virtual ~LNGloader();
+  virtual LNGtexture *Front(void) {return textures->front();}
+  virtual LNGtexture *Back(void) {return textures->back();}
+  virtual LNGtexture *At(int n) {return textures->at(n);}
+  virtual void Append(LNGtexture *t) {textures->push_back(t);}
   virtual void LoadNext(void);
 };
 
