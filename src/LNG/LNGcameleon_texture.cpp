@@ -22,7 +22,7 @@ GLubyte *LNGcameleon_texture::CustomPixel(GLubyte *buf)
   if(norm && buf[0] >= 96 && buf[1] >= 96 && buf[2] >= 96){
     buf[0] = norm & 1 ? buf[0] : 0;
     buf[1] = norm & 2 ? buf[1] : 0;
-    buf[2] = norm & 4 ? buf[3] : 0;
+    buf[2] = norm & 4 ? buf[2] : 0;
   }
   return buf;
 }

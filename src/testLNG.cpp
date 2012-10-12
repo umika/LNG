@@ -89,6 +89,21 @@ void TestLNG::Update(void)
   if(angle.x < 0.0) angle.x += 360.0;
   if(angle.y < 0.0) angle.y += 360.0;
   if(angle.z < 0.0) angle.z += 360.0;
+
+  LNGtexture *t = loader->At(0);
+  if(t && !t->loading && t->buffer){
+    for(int y = 0; y < t->size.h; y++){
+      for(int x = 0; x < t->size.w; x++){
+        int q = (y * t->size.w + x) * t->bytes_par_pixel;
+        GLuint abgr = *(GLuint *)&t->buffer[q];
+        t->buffer[q + 0] = (abgr >> 16) & 0x0ff;
+        t->buffer[q + 1] = ~(abgr & 0x00ff);
+        t->buffer[q + 2] = (abgr >> 8) & 0x0ff;
+      }
+    }
+    t->UpdateBuffer();
+  }
+
   LNG3Dframe::Update();
 }
 
