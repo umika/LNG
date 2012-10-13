@@ -42,14 +42,14 @@ void TestLNG::Finalize(void)
 
 void TestLNG::LoadTextures(void)
 {
+  for(int i = 0; i < 6; i++)
+    loader->Append(
+      new LNGcameleon_texture(i, string("72dpi.png"), false, false, true));
   for(int i = 0; i < 6; i++){
     ostringstream oss;
     oss << "f" << i << ".png";
     loader->Append(new LNGtexture(oss.str(), !i));
   }
-  for(int i = 0; i < 6; i++)
-    loader->Append(
-      new LNGcameleon_texture(i, string("72dpi.png"), false, false, true));
   char *fn[] = {"72dpi_ascii_reigasou_16x16.png"};
   for(int i = 0; i < sizeof(fn) / sizeof(fn[0]); i++)
     loader->Append(new LNGchar_texture(string(fn[i])));
@@ -90,10 +90,11 @@ void TestLNG::Update(void)
   if(angle.y < 0.0) angle.y += 360.0;
   if(angle.z < 0.0) angle.z += 360.0;
 
-  LNGtexture *t = loader->At(0);
+//#if _DEBUG
+  LNGtexture *t = loader->At(6);
   if(t && !t->loading && t->buffer){
-    for(int y = 0; y < t->size.h; y++){
-      for(int x = 0; x < t->size.w; x++){
+    for(int y = 0; y < t->size.h / 2; y++){
+      for(int x = 0; x < t->size.w / 2; x++){
         int q = (y * t->size.w + x) * t->bytes_par_pixel;
         GLuint abgr = *(GLuint *)&t->buffer[q];
         t->buffer[q + 0] = (abgr >> 16) & 0x0ff;
@@ -103,6 +104,7 @@ void TestLNG::Update(void)
     }
     t->UpdateBuffer();
   }
+//#endif
 
   LNG3Dframe::Update();
 }
@@ -144,6 +146,53 @@ void TestLNG::DisplayDraw(void)
   glEnd();
   glDisable(GL_BLEND);
   glEnable(GL_TEXTURE_2D);
+
+  glEnable(GL_TEXTURE_2D);
+  LNGtexture *h = loader->At(6);
+  if(h && !h->loading){
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, h->id);
+    glBegin(GL_QUADS);
+      // reverse top / bottom
+      glTexCoord2f(0.0, 0.0); glVertex3f(-0.5, -0.5, -1.0);
+      glTexCoord2f(1.0, 0.0); glVertex3f( 0.5, -0.5, -1.0);
+      glTexCoord2f(1.0, 1.0); glVertex3f( 0.5,  0.5, -1.0);
+      glTexCoord2f(0.0, 1.0); glVertex3f(-0.5,  0.5, -1.0);
+    glEnd();
+    glDisable(GL_BLEND);
+  }
+  LNGtexture *c = loader->Back();
+  if(c && !c->loading){
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, c->id);
+    glBegin(GL_QUADS);
+      // reverse top / bottom
+      glTexCoord2f(0.0, 0.0); glVertex3f( 0.0, -0.4,  1.0);
+      glTexCoord2f(1.0, 0.0); glVertex3f( 0.8, -0.4,  1.0);
+      glTexCoord2f(1.0, 1.0); glVertex3f( 0.8,  0.4,  1.0);
+      glTexCoord2f(0.0, 1.0); glVertex3f( 0.0,  0.4,  1.0);
+    glEnd();
+    glDisable(GL_BLEND);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+//  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//  glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
+//  glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+    glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, c->id);
+    glBegin(GL_QUADS);
+      glTexCoord2f(0.0625, 0.6875); glVertex3f(-0.2, -0.2, 1.1);
+      glTexCoord2f(0.1250, 0.6875); glVertex3f( 0.2, -0.2, 1.1);
+      glTexCoord2f(0.1250, 0.7500); glVertex3f( 0.2,  0.2, 1.1);
+      glTexCoord2f(0.0625, 0.7500); glVertex3f(-0.2,  0.2, 1.1);
+    glEnd();
+    glDisable(GL_BLEND);
+  }
+  glDisable(GL_TEXTURE_2D);
 
   GLfloat p = box, q = -box;
   glDisable(GL_TEXTURE_2D);

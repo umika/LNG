@@ -14,7 +14,6 @@ Requires
 --------
 
  * glut-3.7.6 ( http://user.xmission.com/~nate/glut.html )
- * glpng-1.45 ( http://openports.se/graphics/glpng )
 
 Optional
 --------
