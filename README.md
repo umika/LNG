@@ -12,6 +12,7 @@ ScreenShot
 Links
 -----
 
+ * http://umika.github.com/LNG/wiki (wiki)
  * http://umika.github.com/LNG/ (web)
  * https://github.com/umika/LNG/ (here)
 
