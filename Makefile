@@ -95,4 +95,4 @@ $(ODIR)pngreview.obj : $(TDIR)$(*B).cpp
 clean :
 	del obj\*.obj
 
-all : clean pngreview.exe $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNGsphere.exe testLNG.exe
+all : pngreview.exe $(LDIR)$(OUTPUT) testLNG2D.exe testLNG3D.exe testLNGsphere.exe testLNG.exe
